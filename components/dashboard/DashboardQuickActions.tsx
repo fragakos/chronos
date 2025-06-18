@@ -7,6 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Sparkles, Settings, BookOpen, Bell } from "lucide-react";
 
 export const DashboardQuickActions = () => (
@@ -39,7 +41,7 @@ export const DashboardQuickActions = () => (
             <span className="text-xs sm:text-sm">Update Interests</span>
           </Link>
         </Button>
-        <Button
+        {/* <Button
           variant="outline"
           className="h-16 sm:h-20 flex flex-col items-center justify-center space-y-1 sm:space-y-2 p-2"
           asChild
@@ -58,7 +60,7 @@ export const DashboardQuickActions = () => (
             <Bell className="h-5 w-5 sm:h-6 sm:w-6" />
             <span className="text-xs sm:text-sm">Notifications</span>
           </Link>
-        </Button>
+        </Button> */}
       </div>
     </CardContent>
   </Card>
