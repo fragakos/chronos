@@ -37,14 +37,15 @@ export async function POST(req: Request) {
 
   // Check if a daily_fact for today already exists
   const { data: daily_fact } = await supabase
-    .from("daily_facts")
+    .from("user_daily_facts")
     .select("id, fact_content")
-    .eq("fact_date", fact_date)
+    .like("fact_date", `%${fact_date}%`)
+    .eq("user_id", user_id)
     .single();
 
   let daily_fact_id;
   let fact_content;
-
+  console.log(daily_fact);
   if (!daily_fact) {
     // Get user interest analysis
     const { data: analysis_row, error } = await supabase
@@ -78,7 +79,7 @@ export async function POST(req: Request) {
     });
 
     // Insert new daily_fact
-    const { data: inserted_fact } = await supabase
+    const { data: inserted_fact, error: insert_error } = await supabase
       .from("daily_facts")
       .insert({
         fact_date,
@@ -91,6 +92,9 @@ export async function POST(req: Request) {
       .select("id, fact_content")
       .single();
 
+    if (insert_error) {
+      console.log(insert_error);
+    }
     let final_fact_row = inserted_fact;
     if (!final_fact_row || !final_fact_row.fact_content) {
       // Fallback: fetch the row by fact_date
