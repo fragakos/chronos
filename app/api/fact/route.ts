@@ -17,8 +17,8 @@ export async function POST(req: Request) {
     .select("super_user")
     .eq("user_id", user_id)
     .single();
-
-  if (!is_superUser) {
+  console.log("is_superUser", is_superUser);
+  if (!is_superUser?.super_user) {
     //   --- 24-hour restriction check (commented out for debug) ---
     const { data: recent_fact } = await supabase
       .from("user_daily_facts")
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
 
   let daily_fact_id;
   let fact_content;
-  if (!daily_fact || is_superUser) {
+  if (!daily_fact || is_superUser?.super_user) {
     // Get user interest analysis
     const { data: analysis_row, error } = await supabase
       .from("user_interest_analysis")
