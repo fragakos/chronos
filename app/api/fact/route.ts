@@ -52,7 +52,6 @@ export async function POST(req: Request) {
 
   let daily_fact_id;
   let fact_content;
-  console.log(daily_fact);
   if (!daily_fact || is_superUser) {
     // Get user interest analysis
     const { data: analysis_row, error } = await supabase
@@ -71,11 +70,11 @@ export async function POST(req: Request) {
         .from("user_daily_facts")
         .select("daily_fact_id")
         .eq("user_id", user_id)
-        .limit(20);
+        .limit(10);
     if (previous_facts_ids_error) {
       console.log("previous_facts_ids_error", previous_facts_ids_error);
     } else {
-      console.log("previous_facts_ids", previous_facts_ids);
+      // console.log("previous_facts_ids", previous_facts_ids);
     }
     const { data: previous_facts } = await supabase
       .from("daily_facts")
@@ -83,7 +82,7 @@ export async function POST(req: Request) {
       .in("id", previous_facts_ids?.map((fact) => fact.daily_fact_id) || []);
     const previous_headings = previous_facts?.map((fact) => fact.fact_heading);
     const previous_headings_string = previous_headings?.join("\n") || "";
-    console.log("previous_headings_string", previous_headings_string);
+    // console.log("previous_headings_string", previous_headings_string);
     const analysis_prompt = createPrompt(analysis, previous_headings_string);
 
     // Call OpenAI (non-streaming) using generateText

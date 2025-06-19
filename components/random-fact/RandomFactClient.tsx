@@ -110,14 +110,12 @@ export const RandomFactClient = ({ userId }: RandomFactClientProps) => {
             </CardHeader>
             <CardContent className="text-center space-y-4">
               {loading || regenerating ? (
-                // <div className="flex flex-col items-center justify-center py-8">
-                //   <Loader2 className="animate-spin h-8 w-8 text-blue-500 mb-2" />
-                //   <span className="text-gray-500">Generating...</span>
-                // </div>
-                <Loader
-                  loadingStates={generatingFactStates}
-                  loading={loading}
-                />
+                <div className="flex flex-col items-center justify-center">
+                  <Loader
+                    loadingStates={generatingFactStates}
+                    loading={loading}
+                  />
+                </div>
               ) : error ? (
                 <div className="bg-red-50 p-4 rounded-lg text-red-700">
                   {error}

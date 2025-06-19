@@ -86,13 +86,13 @@ export function NavHeader({
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="sm:hidden border-t border-gray-200 bg-white">
+          <div className="sm:hidden border-t  ">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {/* Back Button for Mobile */}
               {showBackButton && (
                 <Link
                   href={backHref}
-                  className="block px-3 py-2 text-sm  hover:bg-gray-50 rounded-md transition-colors"
+                  className="block px-3 py-2 text-sm  rounded-md transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   ← {backLabel}
@@ -100,7 +100,7 @@ export function NavHeader({
               )}
 
               {/* User Info */}
-              <div className="px-3 py-2 flex items-center space-x-2 border-b border-gray-100">
+              <div className="px-3 py-2 flex items-center space-x-2 border-b ">
                 <User className="h-4 w-4 " />
                 <span className="text-sm  truncate">{user.email}</span>
               </div>

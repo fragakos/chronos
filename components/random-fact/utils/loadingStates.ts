@@ -21,6 +21,6 @@ export const generatingFactStates = [
     text: "Raiding the Library of Alexandria...",
   },
   {
-    text: "Almost there, just fact-checking with Einstein...",
+    text: "Almost there...",
   },
 ];
