@@ -45,7 +45,7 @@ export async function POST(req: Request) {
   // Check if a daily_fact for today already exists
   const { data: daily_fact } = await supabase
     .from("user_daily_facts")
-    .select("id, fact_content")
+    .select("id, daily_facts(fact_content, fact_heading)")
     .like("fact_date", `%${fact_date}%`)
     .eq("user_id", user_id)
     .single();
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
     }
     const { data: previous_facts } = await supabase
       .from("daily_facts")
-      .select("id, fact_heading")
+      .select("id, fact_heading, fact_content")
       .in("id", previous_facts_ids?.map((fact) => fact.daily_fact_id) || []);
     const previous_headings = previous_facts?.map((fact) => fact.fact_heading);
     const previous_headings_string = previous_headings?.join("\n") || "";
@@ -103,7 +103,7 @@ export async function POST(req: Request) {
         llm_model: "gpt-4o",
         is_verified: false,
       })
-      .select("id, fact_content")
+      .select("id, fact_content, fact_heading")
       .single();
 
     if (insert_error) {
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
       // Fallback: fetch the row by fact_date
       const { data: fetched_fact } = await supabase
         .from("daily_facts")
-        .select("id, fact_content")
+        .select("id, fact_content, fact_heading")
         .eq("fact_date", fact_date)
         .single();
       final_fact_row = fetched_fact;
@@ -127,10 +127,12 @@ export async function POST(req: Request) {
       });
     }
     daily_fact_id = final_fact_row.id;
-    fact_content = final_fact_row.fact_content;
+    fact_content =
+      final_fact_row.fact_heading + "\n" + final_fact_row.fact_content;
   } else {
     daily_fact_id = daily_fact.id;
-    fact_content = daily_fact.fact_content;
+    const factData = daily_fact.daily_facts[0];
+    fact_content = factData.fact_heading + "\n" + factData.fact_content;
   }
 
   // Insert into user_daily_facts

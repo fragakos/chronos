@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -6,9 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { Sparkles, Settings, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { User } from "@supabase/supabase-js";
+import StarWarsButton from "@/components/ui/starWarsButton";
 
 interface DashboardWelcomeProps {
   user: User;
@@ -29,26 +28,8 @@ export const DashboardWelcome = ({ user }: DashboardWelcomeProps) => (
       </CardDescription>
     </CardHeader>
     <CardContent>
-      <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-        <Button
-          asChild
-          className="flex items-center justify-center space-x-2 w-full sm:w-auto"
-        >
-          <Link href="/random-fact">
-            <Sparkles className="h-4 w-4" />
-            <span>Get Random Fact</span>
-          </Link>
-        </Button>
-        <Button
-          variant="outline"
-          asChild
-          className="flex items-center justify-center space-x-2 w-full sm:w-auto"
-        >
-          <Link href="/set-interests">
-            <Settings className="h-4 w-4" />
-            <span>Update Interests</span>
-          </Link>
-        </Button>
+      <div className="flex items-center justify-center w-full">
+        <StarWarsButton label="Get Random Fact" link="/random-fact" />
       </div>
     </CardContent>
   </Card>

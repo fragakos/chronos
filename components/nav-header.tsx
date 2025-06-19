@@ -69,6 +69,7 @@ export function NavHeader({
 
           {/* Mobile Menu Button */}
           <div className="sm:hidden">
+            <ModeToggle />
             <Button
               variant="ghost"
               size="sm"
