@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogOut, User, Menu, X } from "lucide-react";
-
+import { ModeToggle } from "@/components/theme-togle";
 interface NavHeaderProps {
   user: {
     email?: string;
@@ -30,21 +30,21 @@ export function NavHeader({
   };
 
   return (
-    <header className="bg-white shadow-sm border-b relative">
+    <header className="shadow-sm border-b relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Back Button */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             <Link
               href="/"
-              className="text-xl sm:text-2xl font-bold text-gray-900 hover:text-gray-700 transition-colors"
+              className="text-xl sm:text-2xl font-bold  transition-colors"
             >
               Chronikos
             </Link>
             {showBackButton && (
               <Link
                 href={backHref}
-                className="hidden sm:flex text-sm text-gray-600 hover:text-gray-900 transition-colors items-center space-x-1"
+                className="hidden sm:flex text-sm  transition-colors items-center space-x-1"
               >
                 <span>←</span>
                 <span>{backLabel}</span>
@@ -55,11 +55,10 @@ export function NavHeader({
           {/* Desktop Menu */}
           <div className="hidden sm:flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <User className="h-5 w-5 text-gray-400" />
-              <span className="text-sm text-gray-600 truncate max-w-32">
-                {user.email}
-              </span>
+              <User className="h-5 w-5 " />
+              <span className="text-sm  truncate max-w-32">{user.email}</span>
             </div>
+            <ModeToggle />
             <form action="/auth/logout" method="post">
               <Button variant="outline" size="sm" type="submit">
                 <LogOut className="mr-2 h-4 w-4" />
@@ -93,7 +92,7 @@ export function NavHeader({
               {showBackButton && (
                 <Link
                   href={backHref}
-                  className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                  className="block px-3 py-2 text-sm  hover:bg-gray-50 rounded-md transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   ← {backLabel}
@@ -102,10 +101,8 @@ export function NavHeader({
 
               {/* User Info */}
               <div className="px-3 py-2 flex items-center space-x-2 border-b border-gray-100">
-                <User className="h-4 w-4 text-gray-400" />
-                <span className="text-sm text-gray-600 truncate">
-                  {user.email}
-                </span>
+                <User className="h-4 w-4 " />
+                <span className="text-sm  truncate">{user.email}</span>
               </div>
 
               {/* Logout Button */}

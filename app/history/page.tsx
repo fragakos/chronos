@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BookOpen, Calendar, Star, Bookmark } from "lucide-react";
-import { NavHeader } from "@/components/dashboard/nav-header";
 
 export default async function HistoryPage() {
   const cookieStore = await cookies();
@@ -26,22 +25,14 @@ export default async function HistoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavHeader
-        user={user}
-        showBackButton={true}
-        backLabel="Back to Dashboard"
-      />
-
+    <div className="min-h-screen">
       {/* Main Content */}
       <main className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {/* Page Header */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Your Reading History
-            </h2>
-            <p className="text-gray-600">
+            <h2 className="text-3xl font-bold mb-2">Your Reading History</h2>
+            <p className="">
               Track the historical facts you&apos;ve discovered and your
               engagement
             </p>
@@ -56,8 +47,8 @@ export default async function HistoryPage() {
                     <BookOpen className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Total Facts Read</p>
-                    <p className="text-2xl font-bold text-gray-900">0</p>
+                    <p className="text-sm ">Total Facts Read</p>
+                    <p className="text-2xl font-bold ">0</p>
                   </div>
                 </div>
               </CardContent>
@@ -70,8 +61,8 @@ export default async function HistoryPage() {
                     <Star className="h-5 w-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Average Rating</p>
-                    <p className="text-2xl font-bold text-gray-900">-</p>
+                    <p className="text-sm ">Average Rating</p>
+                    <p className="text-2xl font-bold ">-</p>
                   </div>
                 </div>
               </CardContent>
@@ -84,8 +75,8 @@ export default async function HistoryPage() {
                     <Bookmark className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Bookmarked</p>
-                    <p className="text-2xl font-bold text-gray-900">0</p>
+                    <p className="text-sm ">Bookmarked</p>
+                    <p className="text-2xl font-bold ">0</p>
                   </div>
                 </div>
               </CardContent>
@@ -98,8 +89,8 @@ export default async function HistoryPage() {
                     <Calendar className="h-5 w-5 text-orange-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Reading Streak</p>
-                    <p className="text-2xl font-bold text-gray-900">0 days</p>
+                    <p className="text-sm ">Reading Streak</p>
+                    <p className="text-2xl font-bold ">0 days</p>
                   </div>
                 </div>
               </CardContent>
@@ -119,10 +110,8 @@ export default async function HistoryPage() {
                     <BookOpen className="h-8 w-8 text-gray-400" />
                   </div>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  No Facts Yet
-                </h3>
-                <p className="text-gray-600 mb-6">
+                <h3 className="text-lg font-medium  mb-2">No Facts Yet</h3>
+                <p className=" mb-6">
                   Once you start reading historical facts, they&apos;ll appear
                   here with your ratings and engagement.
                 </p>
@@ -149,10 +138,8 @@ export default async function HistoryPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h3 className="font-medium text-gray-900">
-                    Reading Progress
-                  </h3>
-                  <ul className="space-y-2 text-sm text-gray-600">
+                  <h3 className="font-medium ">Reading Progress</h3>
+                  <ul className="space-y-2 text-sm ">
                     <li>• Track facts read by date and time</li>
                     <li>• View reading streaks and statistics</li>
                     <li>• See your most active reading periods</li>
@@ -160,10 +147,8 @@ export default async function HistoryPage() {
                   </ul>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="font-medium text-gray-900">
-                    Engagement Tracking
-                  </h3>
-                  <ul className="space-y-2 text-sm text-gray-600">
+                  <h3 className="font-medium ">Engagement Tracking</h3>
+                  <ul className="space-y-2 text-sm ">
                     <li>• Rate facts from 1-5 stars</li>
                     <li>• Bookmark your favorite facts</li>
                     <li>• View average ratings by category</li>
@@ -186,21 +171,15 @@ export default async function HistoryPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium mb-2">By Category</h4>
-                  <p className="text-sm text-gray-600">
-                    Filter by historical topics
-                  </p>
+                  <p className="text-sm ">Filter by historical topics</p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium mb-2">By Rating</h4>
-                  <p className="text-sm text-gray-600">
-                    Show facts by your ratings
-                  </p>
+                  <p className="text-sm ">Show facts by your ratings</p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium mb-2">By Date</h4>
-                  <p className="text-sm text-gray-600">
-                    Browse by reading date
-                  </p>
+                  <p className="text-sm ">Browse by reading date</p>
                 </div>
               </div>
             </CardContent>

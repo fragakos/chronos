@@ -47,11 +47,11 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center text-green-600">
+              <CardTitle className="text-2xl text-center ">
                 Check your email
               </CardTitle>
               <CardDescription className="text-center">
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-600 text-center">
+              <p className="text-sm  text-center">
                 Please check your email and click the reset link to set a new
                 password.
               </p>
@@ -79,13 +79,11 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Reset your password
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <h1 className="text-3xl font-bold ">Reset your password</h1>
+          <p className="mt-2 text-sm ">
             Enter your email address and we&apos;ll send you a link to reset
             your password
           </p>
@@ -105,7 +103,7 @@ export default function ForgotPasswordPage() {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="email"
                     type="email"
@@ -119,7 +117,7 @@ export default function ForgotPasswordPage() {
               </div>
 
               {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+                <div className="text-sm text-red-600  p-3 rounded-md">
                   {error}
                 </div>
               )}

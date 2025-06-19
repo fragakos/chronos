@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { InterestQuestionnaire } from "@/components/dashboard/interest-questionnaire";
-import { NavHeader } from "@/components/dashboard/nav-header";
 
 export default async function SetInterestsPage() {
   const cookieStore = await cookies();
@@ -26,13 +25,7 @@ export default async function SetInterestsPage() {
   const hasCompletedOnboarding = !!onboardingResponse;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavHeader
-        user={user}
-        showBackButton={true}
-        backLabel="Back to Dashboard"
-      />
-
+    <div className="min-h-screen">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <InterestQuestionnaire

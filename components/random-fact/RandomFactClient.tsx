@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,25 +10,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Sparkles, Loader2 } from "lucide-react";
-import { NavHeader } from "@/components/dashboard/nav-header";
-import type { User } from "@supabase/supabase-js";
+import { Sparkles } from "lucide-react";
+import { MultiStepLoader as Loader } from "../ui/multi-step-loader";
+import { generatingFactStates } from "./utils/loadingStates";
 import ReactMarkdown from "react-markdown";
 type RandomFactClientProps = {
   userId: string;
-  user: User;
 };
 
-export const RandomFactClient = ({ userId, user }: RandomFactClientProps) => {
+export const RandomFactClient = ({ userId }: RandomFactClientProps) => {
   const router = useRouter();
   const [fact, setFact] = useState<string | null>(null);
   const [dailyFactId, setDailyFactId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [regenerating, setRegenerating] = useState<boolean>(false);
+  const hasFetched = useRef(false);
 
   const fetchFact = useCallback(async () => {
-    setLoading(true);
     setError(null);
     setFact(null);
     setDailyFactId(null);
@@ -43,9 +42,9 @@ export const RandomFactClient = ({ userId, user }: RandomFactClientProps) => {
       if (data.success && data.record) {
         setFact(data.record);
         setDailyFactId(data.daily_fact_id || null);
-      } else if (data.reason === "wait_24h") {
+      } else if (data.reason === "wait_12h") {
         setError(
-          "You can only generate one personalized fact every 24 hours. Please come back later!"
+          "You can only generate one personalized fact every 12 hours. Please come back later!"
         );
       } else {
         setError(
@@ -61,7 +60,10 @@ export const RandomFactClient = ({ userId, user }: RandomFactClientProps) => {
   }, [userId]);
 
   useEffect(() => {
-    fetchFact();
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchFact();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -78,20 +80,13 @@ export const RandomFactClient = ({ userId, user }: RandomFactClientProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavHeader
-        user={user}
-        showBackButton={true}
-        backLabel="Back to Dashboard"
-      />
+    <div className="min-h-screen ">
       <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {/* Page Header */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Random Historical Fact
-            </h2>
-            <p className="text-gray-600">
+            <h2 className="text-3xl font-bold mb-2">Random Historical Fact</h2>
+            <p className="">
               Discover fascinating historical facts tailored to your interests
             </p>
           </div>
@@ -115,16 +110,20 @@ export const RandomFactClient = ({ userId, user }: RandomFactClientProps) => {
             </CardHeader>
             <CardContent className="text-center space-y-4">
               {loading || regenerating ? (
-                <div className="flex flex-col items-center justify-center py-8">
-                  <Loader2 className="animate-spin h-8 w-8 text-blue-500 mb-2" />
-                  <span className="text-gray-500">Generating...</span>
-                </div>
+                // <div className="flex flex-col items-center justify-center py-8">
+                //   <Loader2 className="animate-spin h-8 w-8 text-blue-500 mb-2" />
+                //   <span className="text-gray-500">Generating...</span>
+                // </div>
+                <Loader
+                  loadingStates={generatingFactStates}
+                  loading={loading}
+                />
               ) : error ? (
                 <div className="bg-red-50 p-4 rounded-lg text-red-700">
                   {error}
                 </div>
               ) : fact ? (
-                <div className="bg-gray-50 p-6 rounded-lg text-left whitespace-pre-line text-gray-800">
+                <div className="p-6 rounded-lg text-left whitespace-pre-line">
                   <ReactMarkdown>{fact}</ReactMarkdown>
                 </div>
               ) : null}

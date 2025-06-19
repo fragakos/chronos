@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { MultiStepLoader } from "@/components/ui/multi-step-loader";
 import { QuestionnaireData } from "./utils/form-logic";
 import { submitQuestionnaire } from "@/requests/supabase/submitQuestionnaire";
 import {
@@ -24,7 +25,7 @@ import {
   questionnaireSteps,
 } from "./utils/form-logic";
 import { getInterestCategories } from "@/requests/supabase/getInterestCategories";
-
+import { submissionLoadingStates } from "./utils/loadingStates";
 interface InterestQuestionnaireProps {
   hasCompletedOnboarding: boolean;
 }
@@ -543,7 +544,7 @@ export function InterestQuestionnaire({
                   disabled={isSubmitting}
                   aria-label="Complete setup"
                 >
-                  {isSubmitting ? "Saving..." : "Complete Setup"}
+                  Complete Setup
                 </Button>
               </div>
             </CardContent>
@@ -555,40 +556,47 @@ export function InterestQuestionnaire({
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      {hasCompletedOnboarding && (
-        <Card className="mb-6 bg-card text-card-foreground border border-border">
-          <CardHeader>
-            <CardTitle>{questionnaireSteps.completed.title}</CardTitle>
-            <CardDescription>
-              {questionnaireSteps.completed.description}
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      )}
-      {renderStep()}
-      <div className="mt-8 text-center">
-        <div className="flex justify-center gap-2">
-          {[1, 2, 3, 4, 5].map((step) => (
-            <div
-              key={step}
-              className={
-                `w-3 h-3 rounded-full transition-colors duration-200 ` +
-                (step === currentStep
-                  ? "bg-primary"
-                  : step < currentStep
-                  ? "bg-green-500"
-                  : "bg-muted border border-border")
-              }
-              aria-label={`Step ${step}`}
-              tabIndex={0}
-            />
-          ))}
+    <>
+      <MultiStepLoader
+        loadingStates={submissionLoadingStates}
+        loading={isSubmitting}
+        loop={false}
+      />
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        {hasCompletedOnboarding && (
+          <Card className="mb-6 bg-card text-card-foreground border border-border">
+            <CardHeader>
+              <CardTitle>{questionnaireSteps.completed.title}</CardTitle>
+              <CardDescription>
+                {questionnaireSteps.completed.description}
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        )}
+        {renderStep()}
+        <div className="mt-8 text-center">
+          <div className="flex justify-center gap-2">
+            {[1, 2, 3, 4, 5].map((step) => (
+              <div
+                key={step}
+                className={
+                  `w-3 h-3 rounded-full transition-colors duration-200 ` +
+                  (step === currentStep
+                    ? "bg-primary"
+                    : step < currentStep
+                    ? "bg-green-500"
+                    : "bg-muted border border-border")
+                }
+                aria-label={`Step ${step}`}
+                tabIndex={0}
+              />
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground mt-2">
+            Step {currentStep} of {Object.keys(questionnaireSteps).length - 1}
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground mt-2">
-          Step {currentStep} of 5
-        </p>
       </div>
-    </div>
+    </>
   );
 }

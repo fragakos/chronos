@@ -5,23 +5,10 @@ import { User } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 import { DashboardWelcome } from "./DashboardWelcome";
 import { DashboardProfileSummary } from "./DashboardProfileSummary";
-import { DashboardInterests } from "./DashboardInterests";
 import { DashboardQuickActions } from "./DashboardQuickActions";
 
 interface DashboardMainProps {
   user: User;
-}
-
-interface UserInterest {
-  id: number;
-  user_id: string;
-  category_id: number;
-  interest_level: number;
-  interest_categories: {
-    id: number;
-    name: string;
-    description: string;
-  };
 }
 
 interface UserProfile {
@@ -34,7 +21,6 @@ interface UserProfile {
 }
 
 export function DashboardMain({ user }: DashboardMainProps) {
-  const [userInterests, setUserInterests] = useState<UserInterest[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -45,25 +31,6 @@ export function DashboardMain({ user }: DashboardMainProps) {
     const fetchUserData = async () => {
       try {
         const supabase = createClient();
-
-        // Fetch user interests with category details
-        const { data: interests, error: interestsError } = await supabase
-          .from("user_interests")
-          .select(
-            `
-            *,
-            interest_categories (
-              id,
-              name,
-              description
-            )
-          `
-          )
-          .eq("user_id", user.id)
-          .order("interest_level", { ascending: false });
-
-        if (interestsError) throw interestsError;
-
         // Fetch user profile
         const { data: profile, error: profileError } = await supabase
           .from("user_profiles")
@@ -74,7 +41,6 @@ export function DashboardMain({ user }: DashboardMainProps) {
         if (profileError && profileError.code !== "PGRST116")
           throw profileError; // PGRST116 is "not found"
 
-        setUserInterests(interests || []);
         setUserProfile(profile);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -112,40 +78,6 @@ export function DashboardMain({ user }: DashboardMainProps) {
     fetchAnalysis();
   }, [isDrawerOpen, user.id]);
 
-  const getInterestLevelLabel = (level: number) => {
-    switch (level) {
-      case 5:
-        return "Very High";
-      case 4:
-        return "High";
-      case 3:
-        return "Medium";
-      case 2:
-        return "Low";
-      case 1:
-        return "Very Low";
-      default:
-        return "Unknown";
-    }
-  };
-
-  const getInterestLevelColor = (level: number) => {
-    switch (level) {
-      case 5:
-        return "text-red-600";
-      case 4:
-        return "text-orange-600";
-      case 3:
-        return "text-yellow-600";
-      case 2:
-        return "text-blue-600";
-      case 1:
-        return "text-gray-600";
-      default:
-        return "text-gray-600";
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -171,11 +103,11 @@ export function DashboardMain({ user }: DashboardMainProps) {
       )}
 
       {/* User Interests */}
-      <DashboardInterests
+      {/* <DashboardInterests
         userInterests={userInterests}
         getInterestLevelLabel={getInterestLevelLabel}
         getInterestLevelColor={getInterestLevelColor}
-      />
+      /> */}
 
       {/* Quick Actions */}
       <DashboardQuickActions />

@@ -14,7 +14,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Bell, Clock, CheckCircle, AlertCircle } from "lucide-react";
-import { NavHeader } from "@/components/dashboard/nav-header";
 import { TIMEZONES } from "./timezones";
 
 interface NotificationSettingsProps {
@@ -115,11 +114,6 @@ export default function NotificationSettingsPage({
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <NavHeader
-          user={user}
-          showBackButton={true}
-          backLabel="Back to Dashboard"
-        />
         <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center h-64">
             <div className="text-gray-600">
@@ -133,12 +127,6 @@ export default function NotificationSettingsPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NavHeader
-        user={user}
-        showBackButton={true}
-        backLabel="Back to Dashboard"
-      />
-
       <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {/* Page Header */}

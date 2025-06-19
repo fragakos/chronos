@@ -80,11 +80,11 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center text-green-600 flex items-center justify-center">
+              <CardTitle className="text-2xl text-center  flex items-center justify-center">
                 <CheckCircle className="mr-2 h-6 w-6" />
                 Password updated
               </CardTitle>
@@ -93,7 +93,7 @@ export default function ResetPasswordPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-600 text-center">
+              <p className="text-sm  text-center">
                 You will be redirected to the home page in a few seconds.
               </p>
             </CardContent>
@@ -109,13 +109,11 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Set new password</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Enter your new password below
-          </p>
+          <h1 className="text-3xl font-bold ">Set new password</h1>
+          <p className="mt-2 text-sm ">Enter your new password below</p>
         </div>
 
         <Card>
@@ -132,7 +130,7 @@ export default function ResetPasswordPage() {
               <div className="space-y-2">
                 <Label htmlFor="password">New Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -145,7 +143,7 @@ export default function ResetPasswordPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-3  "
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -159,7 +157,7 @@ export default function ResetPasswordPage() {
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm New Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
@@ -172,7 +170,7 @@ export default function ResetPasswordPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-3  "
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -184,7 +182,7 @@ export default function ResetPasswordPage() {
               </div>
 
               {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+                <div className="text-sm text-red-600  p-3 rounded-md">
                   {error}
                 </div>
               )}

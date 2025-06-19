@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { InterestQuestionnaire } from "@/components/dashboard/interest-questionnaire";
 import { DashboardMain } from "@/components/dashboard/dashboard-main";
-import { NavHeader } from "@/components/dashboard/nav-header";
 
 export default async function Dashboard() {
   const cookieStore = await cookies();
@@ -33,9 +32,7 @@ export default async function Dashboard() {
   const hasInterests = userInterests && userInterests.length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavHeader user={user} />
-
+    <div className="min-h-screen">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
         {!hasCompletedOnboarding || !hasInterests ? (

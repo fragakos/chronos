@@ -14,5 +14,5 @@ export default async function RandomFactPage() {
     redirect("/auth/login");
   }
 
-  return <RandomFactClient userId={user.id} user={user} />;
+  return <RandomFactClient userId={user.id} />;
 }

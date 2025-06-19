@@ -15,8 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff, Mail, Lock, User, Github } from "lucide-react";
+// import { Separator } from "@/components/ui/separator";
+import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -71,35 +71,35 @@ export default function SignupPage() {
     }
   };
 
-  const handleGithubSignup = async () => {
-    setLoading(true);
-    setError(null);
+  // const handleGithubSignup = async () => {
+  //   setLoading(true);
+  //   setError(null);
 
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "github",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider: "github",
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/callback`,
+  //       },
+  //     });
 
-      if (error) {
-        setError(error.message);
-      }
-    } catch {
-      setError("An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (error) {
+  //       setError(error.message);
+  //     }
+  //   } catch {
+  //     setError("An unexpected error occurred");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center text-green-600">
+              <CardTitle className="text-2xl text-center ">
                 Check your email
               </CardTitle>
               <CardDescription className="text-center">
@@ -108,7 +108,7 @@ export default function SignupPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-600 text-center">
+              <p className="text-sm  text-center">
                 Please check your email and click the confirmation link to
                 complete your registration.
               </p>
@@ -128,13 +128,11 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Create your account
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <h1 className="text-3xl font-bold ">Create your account</h1>
+          <p className="mt-2 text-sm ">
             Sign up to get started with your account
           </p>
         </div>
@@ -151,7 +149,7 @@ export default function SignupPage() {
               <div className="space-y-2">
                 <Label htmlFor="fullName">Full Name</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <User className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="fullName"
                     type="text"
@@ -167,7 +165,7 @@ export default function SignupPage() {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="email"
                     type="email"
@@ -183,7 +181,7 @@ export default function SignupPage() {
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -196,7 +194,7 @@ export default function SignupPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-3  "
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -210,7 +208,7 @@ export default function SignupPage() {
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
@@ -223,7 +221,7 @@ export default function SignupPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-3  "
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -235,7 +233,7 @@ export default function SignupPage() {
               </div>
 
               {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+                <div className="text-sm text-red-600  p-3 rounded-md">
                   {error}
                 </div>
               )}
@@ -245,7 +243,7 @@ export default function SignupPage() {
               </Button>
             </form>
 
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
               </div>
@@ -265,10 +263,10 @@ export default function SignupPage() {
             >
               <Github className="mr-2 h-4 w-4" />
               Continue with GitHub
-            </Button>
+            </Button> */}
           </CardContent>
           <CardFooter className="flex justify-center">
-            <div className="text-sm text-center text-gray-600">
+            <div className="text-sm text-center ">
               Already have an account?{" "}
               <Link
                 href="/auth/login"

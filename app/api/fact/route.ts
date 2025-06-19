@@ -12,22 +12,29 @@ export async function POST(req: Request) {
   const supabase = createClient(await cookies());
   const { user_id } = await req.json();
 
-  //   --- 24-hour restriction check (commented out for debug) ---
-  const { data: recent_fact } = await supabase
-    .from("user_daily_facts")
-    .select("delivered_at")
+  const { data: is_superUser } = await supabase
+    .from("user_profiles")
+    .select("super_user")
     .eq("user_id", user_id)
-    .order("delivered_at", { ascending: false })
-    .limit(1)
     .single();
-  if (recent_fact && recent_fact.delivered_at) {
-    const lastDelivered = new Date(recent_fact.delivered_at);
-    const now = new Date();
-    if (now.getTime() - lastDelivered.getTime() < 24 * 60 * 60 * 1000) {
-      return NextResponse.json({ success: false, reason: "wait_24h" });
+
+  if (!is_superUser) {
+    //   --- 24-hour restriction check (commented out for debug) ---
+    const { data: recent_fact } = await supabase
+      .from("user_daily_facts")
+      .select("delivered_at")
+      .eq("user_id", user_id)
+      .order("delivered_at", { ascending: false })
+      .limit(1)
+      .single();
+    if (recent_fact && recent_fact.delivered_at) {
+      const lastDelivered = new Date(recent_fact.delivered_at);
+      const now = new Date();
+      if (now.getTime() - lastDelivered.getTime() < 12 * 60 * 60 * 1000) {
+        return NextResponse.json({ success: false, reason: "wait_12h" });
+      }
     }
   }
-
   // Get today's date (YYYY-MM-DD)
   const today = new Date();
   const yyyy = today.getFullYear();
@@ -46,7 +53,7 @@ export async function POST(req: Request) {
   let daily_fact_id;
   let fact_content;
   console.log(daily_fact);
-  if (!daily_fact) {
+  if (!daily_fact || is_superUser) {
     // Get user interest analysis
     const { data: analysis_row, error } = await supabase
       .from("user_interest_analysis")
@@ -59,15 +66,24 @@ export async function POST(req: Request) {
     }
     const analysis = analysis_row?.ai_response;
     //Get Headings of previous facts
+    const { data: previous_facts_ids, error: previous_facts_ids_error } =
+      await supabase
+        .from("user_daily_facts")
+        .select("daily_fact_id")
+        .eq("user_id", user_id)
+        .limit(20);
+    if (previous_facts_ids_error) {
+      console.log("previous_facts_ids_error", previous_facts_ids_error);
+    } else {
+      console.log("previous_facts_ids", previous_facts_ids);
+    }
     const { data: previous_facts } = await supabase
       .from("daily_facts")
-      .select("fact_heading")
-      .eq("user_id", user_id)
-      .order("fact_date", { ascending: false })
-      .limit(20);
+      .select("id, fact_heading")
+      .in("id", previous_facts_ids?.map((fact) => fact.daily_fact_id) || []);
     const previous_headings = previous_facts?.map((fact) => fact.fact_heading);
     const previous_headings_string = previous_headings?.join("\n") || "";
-
+    console.log("previous_headings_string", previous_headings_string);
     const analysis_prompt = createPrompt(analysis, previous_headings_string);
 
     // Call OpenAI (non-streaming) using generateText
@@ -77,14 +93,13 @@ export async function POST(req: Request) {
       maxTokens: 800,
       temperature: 0.7,
     });
-
     // Insert new daily_fact
     const { data: inserted_fact, error: insert_error } = await supabase
       .from("daily_facts")
       .insert({
         fact_date,
         fact_heading: result.text.split("\n")[0],
-        fact_content: result.text || "",
+        fact_content: result.text.split("\n").slice(1).join("\n") || "",
         source_prompt: analysis_prompt,
         llm_model: "gpt-4o",
         is_verified: false,

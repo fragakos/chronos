@@ -52,32 +52,26 @@ export const DashboardProfileSummary = ({
     <CardContent>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <p className="text-sm font-medium text-gray-600">Experience Level</p>
+          <p className="text-sm font-medium ">Experience Level</p>
           <p className="text-base sm:text-lg capitalize">
             {userProfile.experience_level}
           </p>
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-600">
-            Preferred Fact Length
-          </p>
+          <p className="text-sm font-medium ">Preferred Fact Length</p>
           <p className="text-base sm:text-lg capitalize">
             {userProfile.preferred_fact_length}
           </p>
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-600">
-            Daily Notifications
-          </p>
+          <p className="text-sm font-medium ">Daily Notifications</p>
           <p className="text-base sm:text-lg">
             {userProfile.daily_notification_enabled ? "Enabled" : "Disabled"}
           </p>
         </div>
         {userProfile.daily_notification_enabled && (
           <div>
-            <p className="text-sm font-medium text-gray-600">
-              Notification Time
-            </p>
+            <p className="text-sm font-medium ">Notification Time</p>
             <p className="text-base sm:text-lg">
               {userProfile.notification_time}
             </p>
