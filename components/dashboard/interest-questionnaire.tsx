@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,7 +32,6 @@ interface InterestQuestionnaireProps {
 export function InterestQuestionnaire({
   hasCompletedOnboarding,
 }: InterestQuestionnaireProps) {
-  // const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const languages = ["English", "Greek"];
