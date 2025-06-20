@@ -33,7 +33,7 @@ interface InterestQuestionnaireProps {
 export function InterestQuestionnaire({
   hasCompletedOnboarding,
 }: InterestQuestionnaireProps) {
-  const router = useRouter();
+  // const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const languages = ["English", "Greek"];
@@ -93,10 +93,11 @@ export function InterestQuestionnaire({
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const { success, user_id, onboarding_response_id } =
+      const { success, user_id, onboarding_response_id, error } =
         await submitQuestionnaire(formData);
       if (!success) {
-        throw new Error("Failed to save questionnaire");
+        alert("There was an error saving your responses. Please try again.");
+        throw new Error(error || "Failed to save questionnaire");
       }
       const interestAnalysis = await fetch("/api/analysis", {
         method: "POST",
@@ -108,12 +109,11 @@ export function InterestQuestionnaire({
       });
       const interestAnalysisData = await interestAnalysis.json();
       if (interestAnalysisData.success) {
-        router.push("/");
+        window.location.reload();
       } else {
         alert("There was an error saving your responses. Please try again.");
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Error saving questionnaire:", error);
       alert("There was an error saving your responses. Please try again.");
     } finally {

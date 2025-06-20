@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Bell, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { TIMEZONES } from "./timezones";
 
@@ -113,12 +120,10 @@ export default function NotificationSettingsPage({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen ">
         <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center h-64">
-            <div className="text-gray-600">
-              Loading notification settings...
-            </div>
+            <div className="">Loading notification settings...</div>
           </div>
         </main>
       </div>
@@ -126,15 +131,13 @@ export default function NotificationSettingsPage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen ">
       <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {/* Page Header */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Notification Settings
-            </h2>
-            <p className="text-gray-600">
+            <h2 className="text-3xl font-bold mb-2">Notification Settings</h2>
+            <p className="">
               Configure when you&apos;d like to receive your daily historical
               facts
             </p>
@@ -159,7 +162,7 @@ export default function NotificationSettingsPage({
                   <Label className="text-base">
                     Enable Daily Notifications
                   </Label>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm ">
                     Receive a notification every day with a new historical fact
                   </p>
                 </div>
@@ -182,9 +185,9 @@ export default function NotificationSettingsPage({
                         type="time"
                         value={notificationTime}
                         onChange={(e) => setNotificationTime(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ocus:border-transparent"
                       />
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <div className="flex items-center space-x-2 text-sm ">
                         <Clock className="h-4 w-4" />
                         <span>in your timezone</span>
                       </div>
@@ -196,19 +199,19 @@ export default function NotificationSettingsPage({
                     <Label htmlFor="timezone" className="text-base">
                       Timezone
                     </Label>
-                    <select
-                      id="timezone"
-                      value={timezone}
-                      onChange={(e) => setTimezone(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full max-w-xs"
-                    >
-                      {TIMEZONES.map((tz) => (
-                        <option key={tz.value} value={tz.value}>
-                          {tz.label}
-                        </option>
-                      ))}
-                    </select>
-                    <p className="text-sm text-gray-600">
+                    <Select value={timezone} onValueChange={setTimezone}>
+                      <SelectTrigger className="w-full max-w-xs">
+                        <SelectValue placeholder="Select timezone" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TIMEZONES.map((tz) => (
+                          <SelectItem key={tz.value} value={tz.value}>
+                            {tz.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm ">
                       Current time in {timezone}: {getCurrentTimeInTimezone()}
                     </p>
                   </div>
@@ -254,34 +257,34 @@ export default function NotificationSettingsPage({
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6  rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">1</span>
                   </div>
                   <div>
                     <p className="text-sm font-medium">Set Your Time</p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs ">
                       Choose when you want to receive notifications
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6  rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">2</span>
                   </div>
                   <div>
                     <p className="text-sm font-medium">Daily Fact Generation</p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs ">
                       AI creates a personalized fact for you
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">3</span>
                   </div>
                   <div>
                     <p className="text-sm font-medium">Notification Delivery</p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs">
                       Receive your fact at the scheduled time
                     </p>
                   </div>
@@ -299,34 +302,24 @@ export default function NotificationSettingsPage({
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Push notifications on mobile
-                  </span>
+                  <div className="w-2 h-2  rounded-full"></div>
+                  <span className="text-sm ">Push notifications on mobile</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Email notifications
-                  </span>
+                  <div className="w-2 h-2  rounded-full"></div>
+                  <span className="text-sm ">Email notifications</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Custom notification sounds
-                  </span>
+                  <div className="w-2 h-2  rounded-full"></div>
+                  <span className="text-sm ">Custom notification sounds</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Multiple notification times
-                  </span>
+                  <div className="w-2 h-2  rounded-full"></div>
+                  <span className="text-sm ">Multiple notification times</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Weekend pause options
-                  </span>
+                  <div className="w-2 h-2  rounded-full"></div>
+                  <span className="text-sm ">Weekend pause options</span>
                 </div>
               </CardContent>
             </Card>
@@ -341,24 +334,24 @@ export default function NotificationSettingsPage({
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 border rounded-lg">
-                  <p className="text-sm font-medium text-gray-600">Status</p>
+                  <p className="text-sm font-medium ">Status</p>
                   <p
                     className={`text-lg font-bold ${
-                      notificationEnabled ? "text-green-600" : "text-gray-400"
+                      notificationEnabled ? "text-green-600" : ""
                     }`}
                   >
                     {notificationEnabled ? "Enabled" : "Disabled"}
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
-                  <p className="text-sm font-medium text-gray-600">Time</p>
-                  <p className="text-lg font-bold text-gray-900">
+                  <p className="text-sm font-medium ">Time</p>
+                  <p className="text-lg font-bold ">
                     {notificationEnabled ? notificationTime : "Not set"}
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
-                  <p className="text-sm font-medium text-gray-600">Timezone</p>
-                  <p className="text-lg font-bold text-gray-900">
+                  <p className="text-sm font-medium ">Timezone</p>
+                  <p className="text-lg font-bold ">
                     {notificationEnabled ? timezone : "Not set"}
                   </p>
                 </div>
