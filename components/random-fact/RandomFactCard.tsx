@@ -48,7 +48,7 @@ export const RandomFactCard = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="text-center space-y-4">
+      <CardContent className="text-center space-y-4 px-1 text-lg">
         <RandomFactContent
           loading={loading}
           regenerating={regenerating}
