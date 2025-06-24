@@ -158,8 +158,21 @@ export async function sendScheduledNotifications() {
     }
 
     if (!users || users.length === 0) {
-      return { success: true, message: "No users to notify" };
+      return {
+        success: true,
+        message: "No users to notify",
+        debug: {
+          serverUtcTime: new Date().toISOString(),
+          totalUsersWithNotifications: 0,
+          allUsers: [],
+        },
+      };
     }
+
+    // Debug: Log all users and their local times
+    console.log(
+      `DEBUG - Processing ${users.length} users with notifications enabled`
+    );
 
     // Filter users whose notification time is now or passed within the last 5 minutes
     const usersToNotify = users.filter((user) => {
@@ -218,6 +231,55 @@ export async function sendScheduledNotifications() {
       return {
         success: true,
         message: "No users scheduled for notification at this time",
+        debug: {
+          serverUtcTime: new Date().toISOString(),
+          totalUsersWithNotifications: users.length,
+          usersInTimeWindow: [],
+          allUsersDebug: users.map((user) => {
+            if (!user.notification_time || !user.timezone) {
+              return {
+                userId: user.user_id,
+                timezone: user.timezone || "NOT_SET",
+                notificationTime: user.notification_time || "NOT_SET",
+                error: "Missing timezone or notification time",
+              };
+            }
+
+            try {
+              const now = new Date();
+              const userTime = new Date(
+                now.toLocaleString("en-US", { timeZone: user.timezone })
+              );
+              const userHour = userTime.getHours();
+              const userMinute = userTime.getMinutes();
+              const [notificationHour, notificationMinute] =
+                user.notification_time.split(":").map(Number);
+              const currentTimeInMinutes = userHour * 60 + userMinute;
+              const notificationTimeInMinutes =
+                notificationHour * 60 + notificationMinute;
+              const timeDiff = currentTimeInMinutes - notificationTimeInMinutes;
+
+              return {
+                userId: user.user_id,
+                timezone: user.timezone,
+                userLocalTime: `${userHour
+                  .toString()
+                  .padStart(2, "0")}:${userMinute.toString().padStart(2, "0")}`,
+                notificationTime: user.notification_time,
+                timeDiffMinutes: timeDiff,
+                shouldNotify: timeDiff >= 0 && timeDiff <= 5,
+                utcTime: now.toISOString(),
+              };
+            } catch (error) {
+              return {
+                userId: user.user_id,
+                timezone: user.timezone,
+                notificationTime: user.notification_time,
+                error: error instanceof Error ? error.message : "Unknown error",
+              };
+            }
+          }),
+        },
       };
     }
 
