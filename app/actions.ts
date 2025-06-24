@@ -155,6 +155,9 @@ export async function sendScheduledNotifications() {
     if (usersError) {
       console.error("Error fetching users:", usersError);
       throw usersError;
+    } else {
+      console.log("Users fetched successfully");
+      console.log(users);
     }
 
     if (!users || users.length === 0) {
