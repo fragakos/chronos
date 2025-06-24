@@ -148,7 +148,9 @@ export async function sendScheduledNotifications() {
     // Get users with push subscriptions and notifications enabled
     const { data: users, error: usersError } = await supabase
       .from("user_profiles")
-      .select("user_id, push_subscription, notification_time, timezone")
+      .select(
+        "user_id, push_subscription, notification_time, timezone, last_notification_sent_at"
+      )
       .not("push_subscription", "is", null)
       .eq("daily_notification_enabled", true);
 
@@ -272,6 +274,12 @@ export async function sendScheduledNotifications() {
                 timeDiffMinutes: timeDiff,
                 shouldNotify: timeDiff >= 0 && timeDiff <= 5,
                 utcTime: now.toISOString(),
+                lastNotificationSentAt: user.last_notification_sent_at,
+                alreadyNotifiedToday: user.last_notification_sent_at
+                  ? new Date(user.last_notification_sent_at)
+                      .toISOString()
+                      .split("T")[0] === new Date().toISOString().split("T")[0]
+                  : false,
               };
             } catch (error) {
               return {
@@ -288,26 +296,18 @@ export async function sendScheduledNotifications() {
 
     // Check if users have already been notified today to prevent duplicates
     const today = new Date().toISOString().split("T")[0];
-    const { data: alreadyNotified, error: notifiedError } = await supabase
-      .from("user_daily_facts")
-      .select("user_id")
-      .gte("delivered_at", today)
-      .lt("delivered_at", today + "T23:59:59")
-      .in(
-        "user_id",
-        usersToNotify.map((u) => u.user_id)
-      );
+    const usersToActuallyNotify = usersToNotify.filter((user) => {
+      if (!user.last_notification_sent_at) {
+        return true; // Never been notified, so notify them
+      }
 
-    if (notifiedError) {
-      console.error("Error checking already notified users:", notifiedError);
-    }
+      // Check if last notification was sent today
+      const lastNotificationDate = new Date(user.last_notification_sent_at)
+        .toISOString()
+        .split("T")[0];
 
-    const alreadyNotifiedUserIds = new Set(
-      alreadyNotified?.map((n) => n.user_id) || []
-    );
-    const usersToActuallyNotify = usersToNotify.filter(
-      (user) => !alreadyNotifiedUserIds.has(user.user_id)
-    );
+      return lastNotificationDate !== today; // Only notify if not notified today
+    });
 
     if (usersToActuallyNotify.length === 0) {
       return {
@@ -333,13 +333,13 @@ export async function sendScheduledNotifications() {
           })
         );
 
-        // Record notification delivery (without specific fact reference)
-        await supabase.from("user_daily_facts").insert({
-          user_id: user.user_id,
-          daily_fact_id: null, // No specific fact, just a reminder
-          delivered_at: new Date().toISOString(),
-          is_read: false,
-        });
+        // Update last notification sent time
+        await supabase
+          .from("user_profiles")
+          .update({
+            last_notification_sent_at: new Date().toISOString(),
+          })
+          .eq("user_id", user.user_id);
 
         console.log(
           `Notification sent to user ${user.user_id} at ${user.notification_time} ${user.timezone}`
@@ -359,7 +359,7 @@ export async function sendScheduledNotifications() {
       message: `Scheduled notifications sent to ${usersToActuallyNotify.length} users`,
       details: {
         totalEligible: usersToNotify.length,
-        alreadyNotified: alreadyNotifiedUserIds.size,
+        alreadyNotified: usersToNotify.length - usersToActuallyNotify.length,
         newlyNotified: usersToActuallyNotify.length,
       },
       debug: {
@@ -369,7 +369,11 @@ export async function sendScheduledNotifications() {
           userId: user.user_id,
           timezone: user.timezone,
           notificationTime: user.notification_time,
-          alreadyNotifiedToday: alreadyNotifiedUserIds.has(user.user_id),
+          alreadyNotifiedToday: user.last_notification_sent_at
+            ? new Date(user.last_notification_sent_at)
+                .toISOString()
+                .split("T")[0] === new Date().toISOString().split("T")[0]
+            : false,
         })),
       },
     };
