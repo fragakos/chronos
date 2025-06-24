@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -20,10 +19,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Bell, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import {
+  Bell,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Smartphone,
+} from "lucide-react";
 import { TIMEZONES } from "./timezones";
-import PushNotificationManager from "@/components/push-notification-manager";
-import InstallPrompt from "@/components/install-prompt";
+import { subscribeUser, unsubscribeUser } from "@/app/actions";
 
 interface NotificationSettingsProps {
   user: User;
@@ -51,6 +55,12 @@ export default function NotificationSettingsPage({
     "idle"
   );
 
+  // Push notification states
+  const [isPushSupported, setIsPushSupported] = useState(false);
+  const [pushSubscription, setPushSubscription] =
+    useState<PushSubscription | null>(null);
+  const [pushMessage, setPushMessage] = useState("");
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -76,13 +86,96 @@ export default function NotificationSettingsPage({
       }
     };
 
+    const initializePushNotifications = async () => {
+      if ("serviceWorker" in navigator && "PushManager" in window) {
+        setIsPushSupported(true);
+        await registerServiceWorker();
+        await checkPushSubscription();
+      }
+    };
+
     fetchProfile();
+    initializePushNotifications();
   }, [user.id]);
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    setSaveStatus("idle");
+  const registerServiceWorker = async () => {
+    try {
+      const registration = await navigator.serviceWorker.register("/sw.js", {
+        scope: "/",
+        updateViaCache: "none",
+      });
+      console.log("Service Worker registered:", registration);
+    } catch (error) {
+      console.error("Service Worker registration failed:", error);
+    }
+  };
 
+  const checkPushSubscription = async () => {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const sub = await registration.pushManager.getSubscription();
+      setPushSubscription(sub);
+    } catch (error) {
+      console.error("Error checking subscription:", error);
+    }
+  };
+
+  const subscribeToPush = async () => {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const sub = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+      });
+
+      const result = await subscribeUser(sub);
+      if (result.success) {
+        setPushSubscription(sub);
+        // Automatically enable daily notifications when subscribing to push
+        setNotificationEnabled(true);
+        setPushMessage("Successfully subscribed to daily push notifications!");
+        setTimeout(() => setPushMessage(""), 3000);
+
+        // Auto-save the settings
+        await saveSettings(true, notificationTime, timezone);
+      } else {
+        setPushMessage("Failed to subscribe to push notifications.");
+        setTimeout(() => setPushMessage(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error subscribing to push notifications:", error);
+      setPushMessage("Error subscribing to push notifications.");
+      setTimeout(() => setPushMessage(""), 3000);
+    }
+  };
+
+  const unsubscribeFromPush = async () => {
+    try {
+      if (pushSubscription) {
+        await pushSubscription.unsubscribe();
+        const result = await unsubscribeUser();
+        if (result.success) {
+          setPushSubscription(null);
+          // Automatically disable daily notifications when unsubscribing from push
+          setNotificationEnabled(false);
+          setPushMessage("Successfully unsubscribed from daily notifications!");
+          setTimeout(() => setPushMessage(""), 3000);
+
+          // Auto-save the settings
+          await saveSettings(false, notificationTime, timezone);
+        } else {
+          setPushMessage("Failed to unsubscribe from push notifications.");
+          setTimeout(() => setPushMessage(""), 3000);
+        }
+      }
+    } catch (error) {
+      console.error("Error unsubscribing from push notifications:", error);
+      setPushMessage("Error unsubscribing from push notifications.");
+      setTimeout(() => setPushMessage(""), 3000);
+    }
+  };
+
+  const saveSettings = async (enabled: boolean, time: string, tz: string) => {
     try {
       const supabase = createClient();
 
@@ -90,14 +183,13 @@ export default function NotificationSettingsPage({
         user_id: user.id,
         experience_level: profile?.experience_level || "beginner",
         preferred_fact_length: profile?.preferred_fact_length || "medium",
-        daily_notification_enabled: notificationEnabled,
-        notification_time: notificationTime,
-        timezone: timezone,
+        daily_notification_enabled: enabled,
+        notification_time: time,
+        timezone: tz,
       };
 
       console.log("Saving profile data:", profileData);
 
-      // Use upsert with onConflict parameter to handle unique constraint
       const { data, error } = await supabase
         .from("user_profiles")
         .upsert(profileData, {
@@ -112,11 +204,32 @@ export default function NotificationSettingsPage({
       }
 
       console.log("Profile saved successfully:", data);
-
-      // Update local profile state with the returned data
       setProfile(data);
-      setSaveStatus("success");
-      setTimeout(() => setSaveStatus("idle"), 3000);
+      return { success: true };
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      return { success: false };
+    }
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveStatus("idle");
+
+    try {
+      const result = await saveSettings(
+        notificationEnabled,
+        notificationTime,
+        timezone
+      );
+
+      if (result.success) {
+        setSaveStatus("success");
+        setTimeout(() => setSaveStatus("idle"), 3000);
+      } else {
+        setSaveStatus("error");
+        setTimeout(() => setSaveStatus("idle"), 3000);
+      }
     } catch (error) {
       console.error("Error saving notification settings:", error);
       setSaveStatus("error");
@@ -150,9 +263,6 @@ export default function NotificationSettingsPage({
     <div className="min-h-screen ">
       <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
-          {/* Install Prompt */}
-          <InstallPrompt />
-
           {/* Page Header */}
           <div className="text-center">
             <h2 className="text-3xl font-bold mb-2">Notification Settings</h2>
@@ -170,28 +280,59 @@ export default function NotificationSettingsPage({
                 <span>Daily Notifications</span>
               </CardTitle>
               <CardDescription>
-                Get notified daily with a new historical fact tailored to your
-                interests
+                Subscribe to receive daily historical facts as push
+                notifications at your preferred time
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Enable/Disable Toggle */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label className="text-base">
-                    Enable Daily Notifications
-                  </Label>
-                  <p className="text-sm ">
-                    Receive a notification every day with a new historical fact
-                  </p>
+              {/* Push Notification Status */}
+              {isPushSupported && (
+                <div className="p-4 border rounded-lg bg-blue-50 dark:bg-blue-950">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Smartphone className="h-5 w-5 text-blue-600" />
+                      <div>
+                        <p className="font-medium text-blue-900 dark:text-blue-100">
+                          Push Notifications
+                        </p>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">
+                          {pushSubscription
+                            ? "You're subscribed to receive push notifications"
+                            : "Subscribe to receive notifications on this device"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      {pushSubscription ? (
+                        <Button
+                          onClick={unsubscribeFromPush}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Unsubscribe
+                        </Button>
+                      ) : (
+                        <Button onClick={subscribeToPush} size="sm">
+                          Subscribe
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  {pushMessage && (
+                    <div
+                      className={`mt-3 p-2 rounded text-sm ${
+                        pushMessage.includes("Successfully")
+                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                          : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                      }`}
+                    >
+                      {pushMessage}
+                    </div>
+                  )}
                 </div>
-                <Switch
-                  checked={notificationEnabled}
-                  onCheckedChange={setNotificationEnabled}
-                />
-              </div>
+              )}
 
-              {notificationEnabled && (
+              {(pushSubscription || !isPushSupported) && (
                 <>
                   {/* Notification Time */}
                   <div className="space-y-2">
@@ -204,9 +345,9 @@ export default function NotificationSettingsPage({
                         type="time"
                         value={notificationTime}
                         onChange={(e) => setNotificationTime(e.target.value)}
-                        className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ocus:border-transparent"
+                        className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
-                      <div className="flex items-center space-x-2 text-sm ">
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                         <Clock className="h-4 w-4" />
                         <span>in your timezone</span>
                       </div>
@@ -230,7 +371,7 @@ export default function NotificationSettingsPage({
                         ))}
                       </SelectContent>
                     </Select>
-                    <p className="text-sm ">
+                    <p className="text-sm text-muted-foreground">
                       Current time in {timezone}: {getCurrentTimeInTimezone()}
                     </p>
                   </div>
@@ -238,34 +379,33 @@ export default function NotificationSettingsPage({
               )}
 
               {/* Save Button */}
-              <div className="flex items-center justify-between pt-4 border-t">
-                <div className="flex items-center space-x-2">
-                  {saveStatus === "success" && (
-                    <div className="flex items-center space-x-2 text-green-600">
-                      <CheckCircle className="h-4 w-4" />
-                      <span className="text-sm">
-                        Settings saved successfully!
-                      </span>
-                    </div>
-                  )}
-                  {saveStatus === "error" && (
-                    <div className="flex items-center space-x-2 text-red-600">
-                      <AlertCircle className="h-4 w-4" />
-                      <span className="text-sm">
-                        Error saving settings. Please try again.
-                      </span>
-                    </div>
-                  )}
+              {(pushSubscription || !isPushSupported) && (
+                <div className="flex items-center justify-between pt-4 border-t">
+                  <div className="flex items-center space-x-2">
+                    {saveStatus === "success" && (
+                      <div className="flex items-center space-x-2 text-green-600">
+                        <CheckCircle className="h-4 w-4" />
+                        <span className="text-sm">
+                          Settings saved successfully!
+                        </span>
+                      </div>
+                    )}
+                    {saveStatus === "error" && (
+                      <div className="flex items-center space-x-2 text-red-600">
+                        <AlertCircle className="h-4 w-4" />
+                        <span className="text-sm">
+                          Error saving settings. Please try again.
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <Button onClick={handleSave} disabled={isSaving}>
+                    {isSaving ? "Saving..." : "Save Settings"}
+                  </Button>
                 </div>
-                <Button onClick={handleSave} disabled={isSaving}>
-                  {isSaving ? "Saving..." : "Save Settings"}
-                </Button>
-              </div>
+              )}
             </CardContent>
           </Card>
-
-          {/* Push Notification Manager */}
-          <PushNotificationManager />
 
           {/* Information Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -314,34 +454,66 @@ export default function NotificationSettingsPage({
               </CardContent>
             </Card>
 
-            {/* Future Features */}
+            {/* Available Features */}
             <Card>
               <CardHeader>
-                <CardTitle>Coming Soon</CardTitle>
+                <CardTitle>Available Features</CardTitle>
                 <CardDescription>
-                  Additional notification features
+                  Current notification capabilities
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2  rounded-full"></div>
-                  <span className="text-sm ">Push notifications on mobile</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">
+                    Push notifications on all devices
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2  rounded-full"></div>
-                  <span className="text-sm ">Email notifications</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">
+                    Customizable notification time
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2  rounded-full"></div>
-                  <span className="text-sm ">Custom notification sounds</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">Timezone support</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2  rounded-full"></div>
-                  <span className="text-sm ">Multiple notification times</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">PWA installation support</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2  rounded-full"></div>
-                  <span className="text-sm ">Weekend pause options</span>
+
+                <div className="pt-2 border-t">
+                  <p className="text-sm font-medium text-muted-foreground mb-2">
+                    Coming Soon:
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        Email notifications
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        Custom notification sounds
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        Multiple notification times
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        Weekend pause options
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -354,27 +526,45 @@ export default function NotificationSettingsPage({
               <CardDescription>Your notification preferences</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="p-4 border rounded-lg">
-                  <p className="text-sm font-medium ">Status</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Status
+                  </p>
                   <p
                     className={`text-lg font-bold ${
-                      notificationEnabled ? "text-green-600" : ""
+                      notificationEnabled ? "text-green-600" : "text-gray-500"
                     }`}
                   >
                     {notificationEnabled ? "Enabled" : "Disabled"}
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
-                  <p className="text-sm font-medium ">Time</p>
-                  <p className="text-lg font-bold ">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Time
+                  </p>
+                  <p className="text-lg font-bold">
                     {notificationEnabled ? notificationTime : "Not set"}
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
-                  <p className="text-sm font-medium ">Timezone</p>
-                  <p className="text-lg font-bold ">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Timezone
+                  </p>
+                  <p className="text-lg font-bold">
                     {notificationEnabled ? timezone : "Not set"}
+                  </p>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Push Notifications
+                  </p>
+                  <p
+                    className={`text-lg font-bold ${
+                      pushSubscription ? "text-green-600" : "text-gray-500"
+                    }`}
+                  >
+                    {pushSubscription ? "Subscribed" : "Not subscribed"}
                   </p>
                 </div>
               </div>

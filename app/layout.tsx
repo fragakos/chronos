@@ -5,6 +5,7 @@ import { NavHeader } from "@/components/nav-header";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/theme-provider";
+import InstallDialog from "@/components/install-dialog";
 
 export const metadata: Metadata = {
   title: "Facts Off",
@@ -33,6 +34,7 @@ export default async function RootLayout({
           {user && <NavHeader user={user} />}
           {children}
           <Footer />
+          <InstallDialog />
         </ThemeProvider>
       </body>
     </html>

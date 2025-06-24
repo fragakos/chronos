@@ -158,12 +158,7 @@ export async function sendScheduledNotifications() {
       return { success: false, error: "No fact available for today" };
     }
 
-    // Get current time in various timezones and find users who should receive notifications now
-    const currentTime = new Date();
-    const currentHour = currentTime.getHours();
-    const currentMinute = currentTime.getMinutes();
-
-    // Get users whose notification time matches current time (within 5 minutes)
+    // Get users with push subscriptions and notifications enabled
     const { data: users, error: usersError } = await supabase
       .from("user_profiles")
       .select("user_id, push_subscription, notification_time, timezone")
@@ -179,21 +174,40 @@ export async function sendScheduledNotifications() {
       return { success: true, message: "No users to notify" };
     }
 
-    // Filter users based on their notification time
+    // Filter users based on their notification time in their timezone
     const usersToNotify = users.filter((user) => {
-      if (!user.notification_time) return false;
+      if (!user.notification_time || !user.timezone) return false;
 
-      const [notificationHour, notificationMinute] = user.notification_time
-        .split(":")
-        .map(Number);
+      try {
+        // Get current time in user's timezone
+        const now = new Date();
+        const userTime = new Date(
+          now.toLocaleString("en-US", { timeZone: user.timezone })
+        );
+        const userHour = userTime.getHours();
+        const userMinute = userTime.getMinutes();
 
-      // Check if current time matches notification time (within 5 minutes)
-      const timeDiff = Math.abs(
-        currentHour * 60 +
-          currentMinute -
-          (notificationHour * 60 + notificationMinute)
-      );
-      return timeDiff <= 5;
+        // Parse user's preferred notification time
+        const [notificationHour, notificationMinute] = user.notification_time
+          .split(":")
+          .map(Number);
+
+        // Check if current time in user's timezone matches notification time (within 5 minutes)
+        const currentTimeInMinutes = userHour * 60 + userMinute;
+        const notificationTimeInMinutes =
+          notificationHour * 60 + notificationMinute;
+        const timeDiff = Math.abs(
+          currentTimeInMinutes - notificationTimeInMinutes
+        );
+
+        return timeDiff <= 5;
+      } catch (error) {
+        console.error(
+          `Error processing timezone for user ${user.user_id}:`,
+          error
+        );
+        return false;
+      }
     });
 
     if (usersToNotify.length === 0) {
@@ -203,8 +217,36 @@ export async function sendScheduledNotifications() {
       };
     }
 
+    // Check if users have already been notified today to prevent duplicates
+    const { data: alreadyNotified, error: notifiedError } = await supabase
+      .from("user_daily_facts")
+      .select("user_id")
+      .eq("daily_fact_id", todaysFact.id)
+      .in(
+        "user_id",
+        usersToNotify.map((u) => u.user_id)
+      );
+
+    if (notifiedError) {
+      console.error("Error checking already notified users:", notifiedError);
+    }
+
+    const alreadyNotifiedUserIds = new Set(
+      alreadyNotified?.map((n) => n.user_id) || []
+    );
+    const usersToActuallyNotify = usersToNotify.filter(
+      (user) => !alreadyNotifiedUserIds.has(user.user_id)
+    );
+
+    if (usersToActuallyNotify.length === 0) {
+      return {
+        success: true,
+        message: "All eligible users have already been notified today",
+      };
+    }
+
     // Send notifications to eligible users
-    const notifications = usersToNotify.map(async (user) => {
+    const notifications = usersToActuallyNotify.map(async (user) => {
       try {
         await webpush.sendNotification(
           user.push_subscription,
@@ -228,6 +270,10 @@ export async function sendScheduledNotifications() {
           delivered_at: new Date().toISOString(),
           is_read: false,
         });
+
+        console.log(
+          `Notification sent to user ${user.user_id} at ${user.notification_time} ${user.timezone}`
+        );
       } catch (error) {
         console.error(
           `Error sending notification to user ${user.user_id}:`,
@@ -240,7 +286,12 @@ export async function sendScheduledNotifications() {
 
     return {
       success: true,
-      message: `Scheduled notifications sent to ${usersToNotify.length} users`,
+      message: `Scheduled notifications sent to ${usersToActuallyNotify.length} users`,
+      details: {
+        totalEligible: usersToNotify.length,
+        alreadyNotified: alreadyNotifiedUserIds.size,
+        newlyNotified: usersToActuallyNotify.length,
+      },
     };
   } catch (error) {
     console.error("Error sending scheduled notifications:", error);
