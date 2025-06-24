@@ -189,7 +189,22 @@ export async function sendScheduledNotifications() {
         // This means current time >= notification time and <= notification time + 5 minutes
         const timeDiff = currentTimeInMinutes - notificationTimeInMinutes;
 
-        return timeDiff >= 0 && timeDiff <= 5;
+        const shouldNotify = timeDiff >= 0 && timeDiff <= 5;
+
+        // Debug logging
+        console.log(`DEBUG - User ${user.user_id}:`, {
+          timezone: user.timezone,
+          userLocalTime: `${userHour.toString().padStart(2, "0")}:${userMinute
+            .toString()
+            .padStart(2, "0")}`,
+          notificationTime: user.notification_time,
+          timeDiffMinutes: timeDiff,
+          shouldNotify: shouldNotify,
+          utcTime: now.toISOString(),
+          userTimeString: userTime.toString(),
+        });
+
+        return shouldNotify;
       } catch (error) {
         console.error(
           `Error processing timezone for user ${user.user_id}:`,
@@ -281,6 +296,16 @@ export async function sendScheduledNotifications() {
         totalEligible: usersToNotify.length,
         alreadyNotified: alreadyNotifiedUserIds.size,
         newlyNotified: usersToActuallyNotify.length,
+      },
+      debug: {
+        serverUtcTime: new Date().toISOString(),
+        totalUsersWithNotifications: users.length,
+        usersInTimeWindow: usersToNotify.map((user) => ({
+          userId: user.user_id,
+          timezone: user.timezone,
+          notificationTime: user.notification_time,
+          alreadyNotifiedToday: alreadyNotifiedUserIds.has(user.user_id),
+        })),
       },
     };
   } catch (error) {
