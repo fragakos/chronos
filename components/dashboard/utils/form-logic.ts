@@ -61,7 +61,7 @@ export const regions = [
 
 export const questionnaireSteps = {
   1: {
-    title: "Welcome to Chronikos!",
+    title: "Welcome to Facts Off!",
     description:
       "Let's personalize your historical fact experience. This will help us provide you with the most relevant and interesting facts.",
     experienceLevelLabel: "What's your experience level with history?",

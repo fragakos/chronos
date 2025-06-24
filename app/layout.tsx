@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Chronikos",
+  title: "Facts Off",
   description: "Daily historical facts delivered to your inbox",
 };
 
@@ -25,6 +25,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <meta name="apple-mobile-web-app-title" content="Facts Off" />
+      </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {user && <NavHeader user={user} />}

@@ -39,7 +39,7 @@ export function NavHeader({
               href="/"
               className="text-xl sm:text-2xl font-bold  transition-colors"
             >
-              Chronikos
+              Facts Off
             </Link>
             {showBackButton && (
               <Link

@@ -49,7 +49,7 @@ const Footer = () => {
             <div className="flex items-center space-x-2 mb-4">
               <BookOpen className="h-8 w-8 text-primary" />
               <span className="text-2xl font-bold text-foreground">
-                Chronikos
+                Facts Off
               </span>
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
@@ -122,7 +122,7 @@ const Footer = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <p className="text-muted-foreground text-sm">
-            &copy; 2025 Chronikos. All rights reserved.
+            &copy; 2025 Facts Off. All rights reserved.
           </p>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <span className="text-muted-foreground text-sm">Made with</span>

@@ -226,7 +226,7 @@ const FeaturesSection = () => {
             </h3>
             <p className="text-muted-foreground mb-6">
               In our fast-paced 2025 world, finding time to learn can be
-              challenging. Chronikos delivers bite-sized historical knowledge
+              challenging. Facts Off delivers bite-sized historical knowledge
               that fits perfectly into your daily routine.
             </p>
             <motion.div

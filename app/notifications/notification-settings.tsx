@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/select";
 import { Bell, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { TIMEZONES } from "./timezones";
+import PushNotificationManager from "@/components/push-notification-manager";
+import InstallPrompt from "@/components/install-prompt";
 
 interface NotificationSettingsProps {
   user: User;
@@ -93,12 +95,26 @@ export default function NotificationSettingsPage({
         timezone: timezone,
       };
 
-      const { error } = await supabase
+      console.log("Saving profile data:", profileData);
+
+      // Use upsert with onConflict parameter to handle unique constraint
+      const { data, error } = await supabase
         .from("user_profiles")
-        .upsert(profileData);
+        .upsert(profileData, {
+          onConflict: "user_id",
+        })
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        throw error;
+      }
 
+      console.log("Profile saved successfully:", data);
+
+      // Update local profile state with the returned data
+      setProfile(data);
       setSaveStatus("success");
       setTimeout(() => setSaveStatus("idle"), 3000);
     } catch (error) {
@@ -134,6 +150,9 @@ export default function NotificationSettingsPage({
     <div className="min-h-screen ">
       <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
+          {/* Install Prompt */}
+          <InstallPrompt />
+
           {/* Page Header */}
           <div className="text-center">
             <h2 className="text-3xl font-bold mb-2">Notification Settings</h2>
@@ -244,6 +263,9 @@ export default function NotificationSettingsPage({
               </div>
             </CardContent>
           </Card>
+
+          {/* Push Notification Manager */}
+          <PushNotificationManager />
 
           {/* Information Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

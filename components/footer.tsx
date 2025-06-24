@@ -10,7 +10,7 @@ const Footer = () => {
             <div className="flex items-center space-x-2 mb-4">
               <BookOpen className="h-8 w-8 text-primary" />
               <span className="text-2xl font-bold text-foreground">
-                Chronikos
+                Facts Off
               </span>
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">

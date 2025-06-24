@@ -73,7 +73,7 @@ const HeroSection = () => {
             className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent"
             variants={itemVariants}
           >
-            Chronikos
+            Facts Off
           </motion.h1>
 
           <motion.p
