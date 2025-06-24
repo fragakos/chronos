@@ -145,19 +145,6 @@ export async function sendScheduledNotifications() {
     const cookieStore = await cookies();
     const supabase = createClient(cookieStore);
 
-    // Get today's fact
-    const today = new Date().toISOString().split("T")[0];
-    const { data: todaysFact, error: factError } = await supabase
-      .from("daily_facts")
-      .select("*")
-      .eq("fact_date", today)
-      .single();
-
-    if (factError || !todaysFact) {
-      console.error("No fact found for today:", factError);
-      return { success: false, error: "No fact available for today" };
-    }
-
     // Get users with push subscriptions and notifications enabled
     const { data: users, error: usersError } = await supabase
       .from("user_profiles")
@@ -174,7 +161,7 @@ export async function sendScheduledNotifications() {
       return { success: true, message: "No users to notify" };
     }
 
-    // Filter users based on their notification time in their timezone
+    // Filter users whose notification time is now or passed within the last 5 minutes
     const usersToNotify = users.filter((user) => {
       if (!user.notification_time || !user.timezone) return false;
 
@@ -192,15 +179,17 @@ export async function sendScheduledNotifications() {
           .split(":")
           .map(Number);
 
-        // Check if current time in user's timezone matches notification time (within 5 minutes)
+        // Current time in minutes since midnight
         const currentTimeInMinutes = userHour * 60 + userMinute;
+        // Notification time in minutes since midnight
         const notificationTimeInMinutes =
           notificationHour * 60 + notificationMinute;
-        const timeDiff = Math.abs(
-          currentTimeInMinutes - notificationTimeInMinutes
-        );
 
-        return timeDiff <= 5;
+        // Check if notification time has passed within the last 5 minutes
+        // This means current time >= notification time and <= notification time + 5 minutes
+        const timeDiff = currentTimeInMinutes - notificationTimeInMinutes;
+
+        return timeDiff >= 0 && timeDiff <= 5;
       } catch (error) {
         console.error(
           `Error processing timezone for user ${user.user_id}:`,
@@ -218,10 +207,12 @@ export async function sendScheduledNotifications() {
     }
 
     // Check if users have already been notified today to prevent duplicates
+    const today = new Date().toISOString().split("T")[0];
     const { data: alreadyNotified, error: notifiedError } = await supabase
       .from("user_daily_facts")
       .select("user_id")
-      .eq("daily_fact_id", todaysFact.id)
+      .gte("delivered_at", today)
+      .lt("delivered_at", today + "T23:59:59")
       .in(
         "user_id",
         usersToNotify.map((u) => u.user_id)
@@ -251,22 +242,21 @@ export async function sendScheduledNotifications() {
         await webpush.sendNotification(
           user.push_subscription,
           JSON.stringify({
-            title: todaysFact.fact_heading || "Today's Historical Fact",
-            body: todaysFact.fact_content.substring(0, 100) + "...",
+            title: "Facts Off",
+            body: "Time to get your fact",
             icon: "/web-app-manifest-192x192.png",
             badge: "/web-app-manifest-192x192.png",
             data: {
               url: "/",
-              factId: todaysFact.id,
               dateOfArrival: Date.now(),
             },
           })
         );
 
-        // Record fact delivery
+        // Record notification delivery (without specific fact reference)
         await supabase.from("user_daily_facts").insert({
           user_id: user.user_id,
-          daily_fact_id: todaysFact.id,
+          daily_fact_id: null, // No specific fact, just a reminder
           delivered_at: new Date().toISOString(),
           is_read: false,
         });
