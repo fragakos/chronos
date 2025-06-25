@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen } from "lucide-react";
 import { RandomFactContent } from "./RandomFactContent";
 import { RandomFactActions } from "./RandomFactActions";
+import { Locale } from "@/i18n-config";
 
 type RandomFactCardProps = {
   loading: boolean;
@@ -10,6 +11,7 @@ type RandomFactCardProps = {
   fact: string | null;
   dailyFactId: number | null;
   handleThanks: () => Promise<void>;
+  currentLang: Locale;
 };
 
 export const RandomFactCard = ({
@@ -19,6 +21,7 @@ export const RandomFactCard = ({
   fact,
   dailyFactId,
   handleThanks,
+  currentLang,
 }: RandomFactCardProps) => {
   const title = fact?.split("\n")[0] || "";
   const content = fact?.split("\n").slice(1).join("\n") || "";
@@ -54,11 +57,13 @@ export const RandomFactCard = ({
           regenerating={regenerating}
           error={error}
           fact={content}
+          currentLang={currentLang}
         />
         <RandomFactActions
           fact={fact}
           dailyFactId={dailyFactId}
           handleThanks={handleThanks}
+          currentLang={currentLang}
         />
       </CardContent>
     </Card>

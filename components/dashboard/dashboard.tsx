@@ -2,8 +2,16 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { InterestQuestionnaire } from "@/components/dashboard/interest-questionnaire";
 import { DashboardMain } from "@/components/dashboard/dashboard-main";
+import { getDictionary } from "@/get-dictionary";
+import { Locale } from "@/i18n-config";
 
-export default async function Dashboard() {
+export default async function Dashboard({
+  dictionary,
+  lang,
+}: {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: Locale;
+}) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -38,9 +46,11 @@ export default async function Dashboard() {
         {!hasCompletedOnboarding || !hasInterests ? (
           <InterestQuestionnaire
             hasCompletedOnboarding={hasCompletedOnboarding}
+            dictionary={dictionary}
+            lang={lang}
           />
         ) : (
-          <DashboardMain user={user} />
+          <DashboardMain user={user} dictionary={dictionary} lang={lang} />
         )}
       </main>
     </div>

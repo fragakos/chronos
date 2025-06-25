@@ -5,6 +5,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogOut, User, Menu, X } from "lucide-react";
 import { ModeToggle } from "@/components/theme-togle";
+import LanguageSwitcher from "@/components/language-switcher";
+import { type Locale } from "@/i18n-config";
+
 interface NavHeaderProps {
   user: {
     email?: string;
@@ -12,6 +15,7 @@ interface NavHeaderProps {
       full_name?: string;
     };
   };
+  currentLang: Locale;
   showBackButton?: boolean;
   backHref?: string;
   backLabel?: string;
@@ -19,6 +23,7 @@ interface NavHeaderProps {
 
 export function NavHeader({
   user,
+  currentLang,
   showBackButton = false,
   backHref = "/",
   backLabel = "Back to Dashboard",
@@ -36,7 +41,7 @@ export function NavHeader({
           {/* Logo and Back Button */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             <Link
-              href="/"
+              href={`/${currentLang}`}
               className="text-xl sm:text-2xl font-bold  transition-colors"
             >
               Facts Off
@@ -58,6 +63,7 @@ export function NavHeader({
               <User className="h-5 w-5 " />
               <span className="text-sm  truncate max-w-32">{user.email}</span>
             </div>
+            <LanguageSwitcher currentLang={currentLang} />
             <ModeToggle />
             <form action="/auth/logout" method="post">
               <Button variant="outline" size="sm" type="submit">
@@ -68,7 +74,8 @@ export function NavHeader({
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="sm:hidden">
+          <div className="sm:hidden flex items-center space-x-2">
+            <LanguageSwitcher currentLang={currentLang} />
             <ModeToggle />
             <Button
               variant="ghost"

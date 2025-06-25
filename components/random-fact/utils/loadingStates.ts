@@ -1,4 +1,30 @@
-export const generatingFactStates = [
+export const generatingFactStatesEl = [
+  {
+    text: "Συμβουλεύομαι αρχαίους πάπυρους...",
+  },
+  {
+    text: "Μεταφέρομαι στο χρόνο για να μαζέψω γεγονότα...",
+  },
+  {
+    text: "Σκουπίζω ιστορικά βιβλία...",
+  },
+  {
+    text: "Ζητάω φήμες από τον Ναπολέοντα...",
+  },
+  {
+    text: "Αποκωδικοποιώ ιερογλυφικά...",
+  },
+  {
+    text: "Διεξάγω συνέντευξη με δεινόσαυρους...",
+  },
+  {
+    text: "Κάνω επιδρομή στη Βιβλιοθήκη της Αλεξάνδρειας...",
+  },
+  {
+    text: "Σχεδόν έτοιμο...",
+  },
+];
+export const generatingFactStatesEn = [
   {
     text: "Consulting ancient scrolls...",
   },

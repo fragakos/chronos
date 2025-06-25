@@ -21,113 +21,142 @@ import {
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { type getDictionary } from "@/get-dictionary";
 
-const historyCategories = [
-  {
-    name: "Ancient History",
-    icon: Globe,
-    description: "From the dawn of civilization to the fall of Rome",
-  },
-  {
-    name: "Medieval History",
-    icon: Crown,
-    description: "Knights, castles, and the Middle Ages",
-  },
-  {
-    name: "Renaissance & Early Modern",
-    icon: Palette,
-    description: "Art, science, and cultural rebirth",
-  },
-  {
-    name: "Modern History",
-    icon: Zap,
-    description: "Industrial revolution and modern era",
-  },
-  {
-    name: "Contemporary History",
-    icon: Building,
-    description: "Recent events and current affairs",
-  },
-  {
-    name: "Military History",
-    icon: Shield,
-    description: "Battles, strategies, and warfare",
-  },
-  {
-    name: "Cultural History",
-    icon: Users,
-    description: "Art, literature, and cultural movements",
-  },
-  {
-    name: "Political History",
-    icon: Building,
-    description: "Governments, leaders, and political systems",
-  },
-  {
-    name: "Science & Technology",
-    icon: Microscope,
-    description: "Scientific discoveries and innovations",
-  },
-  {
-    name: "Economic History",
-    icon: TrendingUp,
-    description: "Trade, commerce, and economic systems",
-  },
-  {
-    name: "Social History",
-    icon: Heart,
-    description: "Daily life, customs, and social structures",
-  },
-  {
-    name: "World Wars",
-    icon: Sword,
-    description: "The great conflicts of the 20th century",
-  },
-  {
-    name: "American History",
-    icon: Flag,
-    description: "The story of the United States",
-  },
-  {
-    name: "European History",
-    icon: Map,
-    description: "The rich tapestry of European civilization",
-  },
-  {
-    name: "Asian History",
-    icon: Compass,
-    description: "Ancient and modern Asian civilizations",
-  },
-  {
-    name: "African History",
-    icon: Globe,
-    description: "The diverse history of the African continent",
-  },
-  {
-    name: "Latin American History",
-    icon: Map,
-    description: "The vibrant history of Latin America",
-  },
-  {
-    name: "Women in History",
-    icon: Heart,
-    description: "Remarkable women who shaped the world",
-  },
-  {
-    name: "Religious History",
-    icon: Church,
-    description: "Faith, spirituality, and religious movements",
-  },
-  {
-    name: "Archaeological Discoveries",
-    icon: Hammer,
-    description: "Ancient artifacts and lost civilizations",
-  },
-];
-
-const FeaturesSection = () => {
+const FeaturesSection = ({
+  dictionary,
+}: {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+}) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const { landing } = dictionary;
+
+  const historyCategories = [
+    {
+      key: "ancientHistory",
+      icon: Globe,
+      name: landing.features.categories.ancientHistory.name,
+      description: landing.features.categories.ancientHistory.description,
+    },
+    {
+      key: "medievalHistory",
+      icon: Crown,
+      name: landing.features.categories.medievalHistory.name,
+      description: landing.features.categories.medievalHistory.description,
+    },
+    {
+      key: "renaissanceEarlyModern",
+      icon: Palette,
+      name: landing.features.categories.renaissanceEarlyModern.name,
+      description:
+        landing.features.categories.renaissanceEarlyModern.description,
+    },
+    {
+      key: "modernHistory",
+      icon: Zap,
+      name: landing.features.categories.modernHistory.name,
+      description: landing.features.categories.modernHistory.description,
+    },
+    {
+      key: "contemporaryHistory",
+      icon: Building,
+      name: landing.features.categories.contemporaryHistory.name,
+      description: landing.features.categories.contemporaryHistory.description,
+    },
+    {
+      key: "militaryHistory",
+      icon: Shield,
+      name: landing.features.categories.militaryHistory.name,
+      description: landing.features.categories.militaryHistory.description,
+    },
+    {
+      key: "culturalHistory",
+      icon: Users,
+      name: landing.features.categories.culturalHistory.name,
+      description: landing.features.categories.culturalHistory.description,
+    },
+    {
+      key: "politicalHistory",
+      icon: Building,
+      name: landing.features.categories.politicalHistory.name,
+      description: landing.features.categories.politicalHistory.description,
+    },
+    {
+      key: "scienceTechnology",
+      icon: Microscope,
+      name: landing.features.categories.scienceTechnology.name,
+      description: landing.features.categories.scienceTechnology.description,
+    },
+    {
+      key: "economicHistory",
+      icon: TrendingUp,
+      name: landing.features.categories.economicHistory.name,
+      description: landing.features.categories.economicHistory.description,
+    },
+    {
+      key: "socialHistory",
+      icon: Heart,
+      name: landing.features.categories.socialHistory.name,
+      description: landing.features.categories.socialHistory.description,
+    },
+    {
+      key: "worldWars",
+      icon: Sword,
+      name: landing.features.categories.worldWars.name,
+      description: landing.features.categories.worldWars.description,
+    },
+    {
+      key: "americanHistory",
+      icon: Flag,
+      name: landing.features.categories.americanHistory.name,
+      description: landing.features.categories.americanHistory.description,
+    },
+    {
+      key: "europeanHistory",
+      icon: Map,
+      name: landing.features.categories.europeanHistory.name,
+      description: landing.features.categories.europeanHistory.description,
+    },
+    {
+      key: "asianHistory",
+      icon: Compass,
+      name: landing.features.categories.asianHistory.name,
+      description: landing.features.categories.asianHistory.description,
+    },
+    {
+      key: "africanHistory",
+      icon: Globe,
+      name: landing.features.categories.africanHistory.name,
+      description: landing.features.categories.africanHistory.description,
+    },
+    {
+      key: "latinAmericanHistory",
+      icon: Map,
+      name: landing.features.categories.latinAmericanHistory.name,
+      description: landing.features.categories.latinAmericanHistory.description,
+    },
+    {
+      key: "womenInHistory",
+      icon: Heart,
+      name: landing.features.categories.womenInHistory.name,
+      description: landing.features.categories.womenInHistory.description,
+    },
+    {
+      key: "religiousHistory",
+      icon: Church,
+      name: landing.features.categories.religiousHistory.name,
+      description: landing.features.categories.religiousHistory.description,
+    },
+    {
+      key: "archaeologicalDiscoveries",
+      icon: Hammer,
+      name: landing.features.categories.archaeologicalDiscoveries.name,
+      description:
+        landing.features.categories.archaeologicalDiscoveries.description,
+    },
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -173,12 +202,10 @@ const FeaturesSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl font-bold text-foreground mb-4">
-            Explore History Your Way
+            {landing.features.title}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Choose from 20+ specialized categories to personalize your daily
-            historical journey. Each category is carefully curated to provide
-            fascinating insights and facts.
+            {landing.features.subtitle}
           </p>
         </motion.div>
 
@@ -188,10 +215,10 @@ const FeaturesSection = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          {historyCategories.map((category, index) => {
+          {historyCategories.map((category) => {
             const IconComponent = category.icon;
             return (
-              <motion.div key={index} variants={cardVariants}>
+              <motion.div key={category.key} variants={cardVariants}>
                 <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-card">
                   <CardHeader className="pb-3">
                     <div className="flex items-center space-x-3">
@@ -222,12 +249,10 @@ const FeaturesSection = () => {
         >
           <div className="bg-card rounded-2xl p-8 shadow-lg max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-foreground mb-4">
-              Perfect for Busy Lives
+              {landing.features.perfectForBusyLives.title}
             </h3>
             <p className="text-muted-foreground mb-6">
-              In our fast-paced 2025 world, finding time to learn can be
-              challenging. Facts Off delivers bite-sized historical knowledge
-              that fits perfectly into your daily routine.
+              {landing.features.perfectForBusyLives.description}
             </p>
             <motion.div
               className="grid md:grid-cols-3 gap-6 text-center"
@@ -239,15 +264,21 @@ const FeaturesSection = () => {
                 <div className="text-3xl font-bold text-primary mb-2">
                   10 min
                 </div>
-                <div className="text-muted-foreground">Daily commitment</div>
+                <div className="text-muted-foreground">
+                  {landing.features.perfectForBusyLives.stats.dailyCommitment}
+                </div>
               </motion.div>
               <motion.div variants={itemVariants}>
                 <div className="text-3xl font-bold text-primary mb-2">20+</div>
-                <div className="text-muted-foreground">History categories</div>
+                <div className="text-muted-foreground">
+                  {landing.features.perfectForBusyLives.stats.historyCategories}
+                </div>
               </motion.div>
               <motion.div variants={itemVariants}>
                 <div className="text-3xl font-bold text-primary mb-2">365</div>
-                <div className="text-muted-foreground">Days of learning</div>
+                <div className="text-muted-foreground">
+                  {landing.features.perfectForBusyLives.stats.daysOfLearning}
+                </div>
               </motion.div>
             </motion.div>
           </div>

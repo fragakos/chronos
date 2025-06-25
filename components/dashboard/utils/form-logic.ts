@@ -1,3 +1,5 @@
+import { getDictionary } from "@/get-dictionary";
+
 export interface QuestionnaireData {
   experience_level: "beginner" | "intermediate" | "advanced" | "expert";
   preferred_fact_length: "short" | "medium" | "long";
@@ -10,118 +12,171 @@ export interface QuestionnaireData {
   language: string;
 }
 
-export const experienceLevels = [
-  { value: "beginner", label: "Beginner - Just starting to explore history" },
+export const experienceLevels = (
+  dictionary: Awaited<ReturnType<typeof getDictionary>>
+) => [
+  {
+    value: "beginner",
+    label: dictionary.questionnaire.experienceLevels.beginner,
+  },
   {
     value: "intermediate",
-    label: "Intermediate - Some knowledge of historical events",
+    label: dictionary.questionnaire.experienceLevels.intermediate,
   },
   {
     value: "advanced",
-    label: "Advanced - Well-versed in many historical topics",
+    label: dictionary.questionnaire.experienceLevels.advanced,
   },
   {
     value: "expert",
-    label: "Expert - Deep knowledge across multiple historical periods",
+    label: dictionary.questionnaire.experienceLevels.expert,
   },
 ];
-export const factLengths = [
-  { value: "short", label: "Short - Quick facts and snippets" },
-  { value: "medium", label: "Medium - Detailed explanations" },
-  { value: "long", label: "Long - Comprehensive historical context" },
+export const factLengths = (
+  dictionary: Awaited<ReturnType<typeof getDictionary>>
+) => [
+  { value: "short", label: dictionary.questionnaire.factLengths.short },
+  { value: "medium", label: dictionary.questionnaire.factLengths.medium },
+  { value: "long", label: dictionary.questionnaire.factLengths.long },
 ];
 
-export const timePeriods = [
-  "Ancient History (Before 500 CE)",
-  "Medieval Period (500-1500)",
-  "Early Modern Period (1500-1800)",
-  "19th Century (1800-1900)",
-  "20th Century (1900-2000)",
-  "Modern Era (2000-Present)",
+export const timePeriods = (
+  dictionary: Awaited<ReturnType<typeof getDictionary>>
+) => [
+  { value: "ancient", label: dictionary.questionnaire.timePeriods.ancient },
+  { value: "medieval", label: dictionary.questionnaire.timePeriods.medieval },
+  {
+    value: "early_modern",
+    label: dictionary.questionnaire.timePeriods.early_modern,
+  },
+  {
+    value: "19th_century",
+    label: dictionary.questionnaire.timePeriods.century_19,
+  },
+  {
+    value: "20th_century",
+    label: dictionary.questionnaire.timePeriods.century_20,
+  },
+  { value: "modern", label: dictionary.questionnaire.timePeriods.modern },
 ];
 
-export const learningMotivations = [
-  "Personal curiosity",
-  "Academic interest",
-  "Professional development",
-  "Travel planning",
-  "Cultural understanding",
-  "Family history research",
+export const learningMotivations = (
+  dictionary: Awaited<ReturnType<typeof getDictionary>>
+) => [
+  {
+    value: "personal_curiosity",
+    label: dictionary.questionnaire.learningMotivations.personal_curiosity,
+  },
+  {
+    value: "academic_interest",
+    label: dictionary.questionnaire.learningMotivations.academic_interest,
+  },
+  {
+    value: "professional_development",
+    label:
+      dictionary.questionnaire.learningMotivations.professional_development,
+  },
+  {
+    value: "travel_planning",
+    label: dictionary.questionnaire.learningMotivations.travel_planning,
+  },
+  {
+    value: "cultural_understanding",
+    label: dictionary.questionnaire.learningMotivations.cultural_understanding,
+  },
+  {
+    value: "family_history_research",
+    label: dictionary.questionnaire.learningMotivations.family_history_research,
+  },
 ];
 
-export const regions = [
-  "Europe",
-  "Asia",
-  "Africa",
-  "North America",
-  "South America",
-  "Middle East",
-  "Oceania",
+export const regions = (
+  dictionary: Awaited<ReturnType<typeof getDictionary>>
+) => [
+  { value: "europe", label: dictionary.questionnaire.regions.europe },
+  { value: "asia", label: dictionary.questionnaire.regions.asia },
+  { value: "africa", label: dictionary.questionnaire.regions.africa },
+  {
+    value: "north_america",
+    label: dictionary.questionnaire.regions.north_america,
+  },
+  {
+    value: "south_america",
+    label: dictionary.questionnaire.regions.south_america,
+  },
+  { value: "middle_east", label: dictionary.questionnaire.regions.middle_east },
+  { value: "oceania", label: dictionary.questionnaire.regions.oceania },
 ];
 
-export const questionnaireSteps = {
+export const languages = () => [
+  { value: "English", label: "English" },
+  { value: "Greek", label: "Greek" },
+];
+
+export const questionnaireSteps = (
+  dictionary: Awaited<ReturnType<typeof getDictionary>>
+) => ({
   1: {
-    title: "Welcome to Facts Off!",
-    description:
-      "Let's personalize your historical fact experience. This will help us provide you with the most relevant and interesting facts.",
-    experienceLevelLabel: "What's your experience level with history?",
-    factLengthLabel: "What length of facts do you prefer?",
+    title: dictionary.questionnaire.steps.welcome.title,
+    description: dictionary.questionnaire.steps.welcome.description,
+    experienceLevelLabel:
+      dictionary.questionnaire.steps.welcome.experienceLevelLabel,
+    factLengthLabel: dictionary.questionnaire.steps.welcome.factLengthLabel,
   },
   2: {
-    title: "Historical Periods",
-    description:
-      "Which historical periods interest you most? (Select all that apply)",
-    timePeriodsLabel: "Select historical periods:",
+    title: dictionary.questionnaire.steps.historicalPeriods.title,
+    description: dictionary.questionnaire.steps.historicalPeriods.description,
+    timePeriodsLabel:
+      dictionary.questionnaire.steps.historicalPeriods.timePeriodsLabel,
   },
   3: {
-    title: "Topics of Interest",
-    description:
-      "What types of historical topics fascinate you? (Select all that apply)",
-    topicsLabel: "Select topics:",
-    loading: "Loading topics...",
-    error: "Failed to load topics.",
+    title: dictionary.questionnaire.steps.topics.title,
+    description: dictionary.questionnaire.steps.topics.description,
+    topicsLabel: dictionary.questionnaire.steps.topics.topicsLabel,
+    loading: dictionary.questionnaire.steps.topics.loading,
+    error: dictionary.questionnaire.steps.topics.error,
   },
   4: {
-    title: "Learning Goals & Regions",
+    title: dictionary.questionnaire.steps.learningGoalsRegions.title,
     description:
-      "Tell us more about your learning motivations and regional interests",
+      dictionary.questionnaire.steps.learningGoalsRegions.description,
     learningMotivationsLabel:
-      "Why are you interested in learning about history? (Select all that apply)",
+      dictionary.questionnaire.steps.learningGoalsRegions
+        .learningMotivationsLabel,
     regionsLabel:
-      "Which regions of the world interest you most? (Select all that apply)",
+      dictionary.questionnaire.steps.learningGoalsRegions.regionsLabel,
     figuresLabel:
-      "Are there any specific historical figures you'd like to learn more about?",
-    figuresPlaceholder: "e.g., Napoleon, Cleopatra, Leonardo da Vinci...",
+      dictionary.questionnaire.steps.learningGoalsRegions.figuresLabel,
+    figuresPlaceholder:
+      dictionary.questionnaire.steps.learningGoalsRegions.figuresPlaceholder,
   },
   5: {
-    title: "Language Preferences",
-    description: "What language do you prefer to read in?",
-    languageLabel: "Select your preferred language:",
+    title: dictionary.questionnaire.steps.languagePreferences.title,
+    description: dictionary.questionnaire.steps.languagePreferences.description,
+    languageLabel:
+      dictionary.questionnaire.steps.languagePreferences.languageLabel,
   },
   6: {
-    title: "Final Thoughts",
-    description:
-      "Any additional thoughts or specific interests you'd like to share?",
-    openEndedLabel:
-      "Is there anything else you'd like us to know about your historical interests?",
+    title: dictionary.questionnaire.steps.finalThoughts.title,
+    description: dictionary.questionnaire.steps.finalThoughts.description,
+    openEndedLabel: dictionary.questionnaire.steps.finalThoughts.openEndedLabel,
     openEndedPlaceholder:
-      "Tell us about any specific events, periods, or topics that fascinate you...",
+      dictionary.questionnaire.steps.finalThoughts.openEndedPlaceholder,
   },
   completed: {
-    title: "Update Your Interests",
-    description:
-      "You've completed the questionnaire before. You can update your preferences below.",
+    title: dictionary.questionnaire.steps.completed.title,
+    description: dictionary.questionnaire.steps.completed.description,
   },
-};
+});
 
 export const questions = [
   "What's your experience level with history?",
   "What length of facts do you prefer?",
-  "Which historical periods interest you most? (Select all that apply)",
-  "What types of historical topics fascinate you? (Select all that apply)",
-  "Why are you interested in learning about history? (Select all that apply)",
-  "Which regions of the world interest you most? (Select all that apply)",
+  "Which historical periods interest you most?",
+  "What types of historical topics fascinate you?",
+  "What are your learning motivations?",
   "Are there any specific historical figures you'd like to learn more about?",
-  "What language do you prefer to read in?",
-  "Is there anything else you'd like us to know about your historical interests?",
+  "Which regions of the world interest you most?",
+  "Is there anything else you'd like to tell us about your historical interests?",
+  "What language do you prefer to read in? (English or Greek)",
 ];

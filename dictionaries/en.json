@@ -1,0 +1,456 @@
+{
+  "server-component": {
+    "welcome": "Welcome"
+  },
+  "counter": {
+    "increment": "Increment",
+    "decrement": "Decrement"
+  },
+  "landing": {
+    "hero": {
+      "tagline": "10 minutes a day",
+      "title": "Facts Off",
+      "subtitle": "Discover fascinating historical facts and insights in just 10 minutes a day. Tailored to your interests, perfect for our fast-paced 2025 lifestyle.",
+      "startLearning": "Start Learning Today",
+      "signIn": "Sign In",
+      "features": {
+        "quickEfficient": {
+          "title": "Quick & Efficient",
+          "description": "Get your daily dose of history in just 10 minutes"
+        },
+        "personalized": {
+          "title": "Personalized",
+          "description": "Content tailored to your specific historical interests"
+        },
+        "richContent": {
+          "title": "Rich Content",
+          "description": "Fascinating facts and insights from world history"
+        }
+      }
+    },
+    "features": {
+      "title": "Explore History Your Way",
+      "subtitle": "Choose from 20+ specialized categories to personalize your daily historical journey. Each category is carefully curated to provide fascinating insights and facts.",
+      "categories": {
+        "ancientHistory": {
+          "name": "Ancient History",
+          "description": "From the dawn of civilization to the fall of Rome"
+        },
+        "medievalHistory": {
+          "name": "Medieval History",
+          "description": "Knights, castles, and the Middle Ages"
+        },
+        "renaissanceEarlyModern": {
+          "name": "Renaissance & Early Modern",
+          "description": "Art, science, and cultural rebirth"
+        },
+        "modernHistory": {
+          "name": "Modern History",
+          "description": "Industrial revolution and modern era"
+        },
+        "contemporaryHistory": {
+          "name": "Contemporary History",
+          "description": "Recent events and current affairs"
+        },
+        "militaryHistory": {
+          "name": "Military History",
+          "description": "Battles, strategies, and warfare"
+        },
+        "culturalHistory": {
+          "name": "Cultural History",
+          "description": "Art, literature, and cultural movements"
+        },
+        "politicalHistory": {
+          "name": "Political History",
+          "description": "Governments, leaders, and political systems"
+        },
+        "scienceTechnology": {
+          "name": "Science & Technology",
+          "description": "Scientific discoveries and innovations"
+        },
+        "economicHistory": {
+          "name": "Economic History",
+          "description": "Trade, commerce, and economic systems"
+        },
+        "socialHistory": {
+          "name": "Social History",
+          "description": "Daily life, customs, and social structures"
+        },
+        "worldWars": {
+          "name": "World Wars",
+          "description": "The great conflicts of the 20th century"
+        },
+        "americanHistory": {
+          "name": "American History",
+          "description": "The story of the United States"
+        },
+        "europeanHistory": {
+          "name": "European History",
+          "description": "The rich tapestry of European civilization"
+        },
+        "asianHistory": {
+          "name": "Asian History",
+          "description": "Ancient and modern Asian civilizations"
+        },
+        "africanHistory": {
+          "name": "African History",
+          "description": "The diverse history of the African continent"
+        },
+        "latinAmericanHistory": {
+          "name": "Latin American History",
+          "description": "The vibrant history of Latin America"
+        },
+        "womenInHistory": {
+          "name": "Women in History",
+          "description": "Remarkable women who shaped the world"
+        },
+        "religiousHistory": {
+          "name": "Religious History",
+          "description": "Faith, spirituality, and religious movements"
+        },
+        "archaeologicalDiscoveries": {
+          "name": "Archaeological Discoveries",
+          "description": "Ancient artifacts and lost civilizations"
+        }
+      },
+      "perfectForBusyLives": {
+        "title": "Perfect for Busy Lives",
+        "description": "In our fast-paced 2025 world, finding time to learn can be challenging. Facts Off delivers bite-sized historical knowledge that fits perfectly into your daily routine.",
+        "stats": {
+          "dailyCommitment": "Daily commitment",
+          "historyCategories": "History categories",
+          "daysOfLearning": "Days of learning"
+        }
+      }
+    },
+    "cta": {
+      "title": "Start Your Historical Journey Today",
+      "subtitle": "Join thousands of learners who are discovering fascinating historical facts in just 10 minutes a day. Perfect for busy professionals, students, and history enthusiasts.",
+      "features": {
+        "quickDailyDoses": {
+          "title": "Quick Daily Doses",
+          "description": "Get your historical knowledge fix in just 10 minutes - perfect for coffee breaks, commutes, or bedtime reading."
+        },
+        "curatedContent": {
+          "title": "Curated Content",
+          "description": "Expertly researched facts and insights from world-renowned historians and scholars."
+        },
+        "personalizedExperience": {
+          "title": "Personalized Experience",
+          "description": "Choose your interests and get content tailored specifically to what fascinates you most."
+        }
+      },
+      "finalCta": {
+        "title": "Ready to Transform Your Daily Routine?",
+        "description": "Sign up now and get your first daily historical fact tomorrow morning. It's completely free to start your journey.",
+        "getStartedFree": "Get Started Free",
+        "alreadyHaveAccount": "I Already Have an Account"
+      }
+    }
+  },
+  "footer": {
+    "brand": {
+      "name": "Facts Off",
+      "description": "Your daily dose of historical knowledge. Discover fascinating facts and insights in just 10 minutes a day, tailored to your interests.",
+      "tagline": "Perfect for busy professionals, students, and history enthusiasts in our fast-paced 2025 world."
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "signUp": "Sign Up",
+      "signIn": "Sign In",
+      "forgotPassword": "Forgot Password"
+    },
+    "language": {
+      "title": "Language"
+    },
+    "categories": {
+      "title": "Categories",
+      "ancientHistory": "Ancient History",
+      "medievalHistory": "Medieval History",
+      "modernHistory": "Modern History",
+      "militaryHistory": "Military History",
+      "andMore": "And 16 more..."
+    },
+    "bottom": {
+      "copyright": "© 2025 Facts Off. All rights reserved.",
+      "madeWith": "Made with",
+      "forHistoryLovers": "for history lovers"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account to continue",
+      "cardTitle": "Sign in",
+      "cardDescription": "Enter your email and password to sign in to your account",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "signInButton": "Sign in",
+      "signingIn": "Signing in...",
+      "dontHaveAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "forgotPassword": "Forgot your password?",
+      "unexpectedError": "An unexpected error occurred"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Sign up to get started with your account",
+      "cardTitle": "Sign up",
+      "cardDescription": "Enter your information to create your account",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "createAccountButton": "Create account",
+      "creatingAccount": "Creating account...",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 6 characters long",
+      "unexpectedError": "An unexpected error occurred",
+      "checkYourEmail": "Check your email",
+      "checkYourEmailDescription": "We've sent you a confirmation link to verify your email address.",
+      "checkYourEmailMessage": "Please check your email and click the confirmation link to complete your registration.",
+      "backToLogin": "Back to login",
+      "success": {
+        "title": "Check your email",
+        "description": "We've sent you a confirmation link to verify your email address.",
+        "message": "Please check your email and click the confirmation link to complete your registration.",
+        "backToLogin": "Back to login"
+      }
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email address and we'll send you a link to reset your password",
+      "cardTitle": "Forgot password",
+      "cardDescription": "Enter your email address to receive a password reset link",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "sendResetLink": "Send reset link",
+      "sendingResetLink": "Sending reset link...",
+      "backToLogin": "Back to login",
+      "unexpectedError": "An unexpected error occurred",
+      "success": {
+        "title": "Check your email",
+        "description": "We've sent you a password reset link to your email address.",
+        "message": "Please check your email and click the reset link to set a new password.",
+        "backToLogin": "Back to login"
+      }
+    },
+    "resetPassword": {
+      "title": "Set new password",
+      "subtitle": "Enter your new password below",
+      "cardTitle": "Reset password",
+      "cardDescription": "Enter your new password to complete the reset process",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmNewPassword": "Confirm New Password",
+      "confirmNewPasswordPlaceholder": "Confirm your new password",
+      "updatePasswordButton": "Update password",
+      "updatingPassword": "Updating password...",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 6 characters long",
+      "success": {
+        "unexpectedError": "An unexpected error occurred",
+        "title": "Password updated",
+        "description": "Your password has been successfully updated.",
+        "message": "You will be redirected to the home page in a few seconds.",
+        "goToHomePage": "Go to home page"
+      }
+    }
+  },
+  "dashboard": {
+    "main": {
+      "welcome": "Welcome back, ",
+      "subtitle": "Ready to discover fascinating historical facts tailored to your interests?",
+      "getRandomFact": "Get a random historical fact",
+      "loading": "Loading your dashboard...",
+      "profileSummary": {
+        "title": "Profile Summary",
+        "subtitle": "Customized content for your interests",
+        "experienceLevel": "Experience Level",
+        "preferredFactLength": "Preferred Fact Length",
+        "dailyNotifications": "Daily Notifications",
+        "notificationTime": "Notification Time",
+        "manageNotifications": "Manage Notifications",
+        "viewAnalysis": "View Analysis",
+        "yourInterestAnalysis": "Your Interest Analysis",
+        "noAnalysisFound": "No analysis found.",
+        "closeAnalysis": "Close"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "subtitle": "Quick actions for your journey",
+        "randomFact": "Get a random historical fact",
+        "updateInterests": "Update Interests",
+        "viewHistory": "View History",
+        "notifications": "Notifications"
+      }
+    }
+  },
+  "questionnaire": {
+    "experienceLevels": {
+      "beginner": "Beginner - Just starting to explore history",
+      "intermediate": "Intermediate - Some knowledge of historical events",
+      "advanced": "Advanced - Well-versed in many historical topics",
+      "expert": "Expert - Deep knowledge across multiple historical periods"
+    },
+    "factLengths": {
+      "short": "Short - Quick facts and snippets",
+      "medium": "Medium - Detailed explanations",
+      "long": "Long - Comprehensive historical context"
+    },
+    "timePeriods": {
+      "ancient": "Ancient History (Before 500 CE)",
+      "medieval": "Medieval Period (500-1500)",
+      "early_modern": "Early Modern Period (1500-1800)",
+      "century_19": "19th Century (1800-1900)",
+      "century_20": "20th Century (1900-2000)",
+      "modern": "Modern Era (2000-Present)"
+    },
+    "topics": {
+      "Ancient History": "Ancient History",
+      "Medieval History": "Medieval History",
+      "Renaissance & Early Modern": "Renaissance & Early Modern",
+      "Modern History": "Modern History",
+      "Contemporary History": "Contemporary History",
+      "Military History": "Military History",
+      "Cultural History": "Cultural History",
+      "Political History": "Political History",
+      "Science & Technology": "Science & Technology",
+      "Economic History": "Economic History",
+      "Social History": "Social History",
+      "World Wars": "World Wars",
+      "American History": "American History",
+      "European History": "European History",
+      "Asian History": "Asian History",
+      "African History": "African History",
+      "Latin American History": "Latin American History",
+      "Women in History": "Women in History",
+      "Religious History": "Religious History",
+      "Archaeological Discoveries": "Archaeological Discoveries"
+    },
+
+    "learningMotivations": {
+      "personal_curiosity": "Personal curiosity",
+      "academic_interest": "Academic interest",
+      "professional_development": "Professional development",
+      "travel_planning": "Travel planning",
+      "cultural_understanding": "Cultural understanding",
+      "family_history_research": "Family history research"
+    },
+    "regions": {
+      "europe": "Europe",
+      "asia": "Asia",
+      "africa": "Africa",
+      "north_america": "North America",
+      "south_america": "South America",
+      "middle_east": "Middle East",
+      "oceania": "Oceania"
+    },
+    "steps": {
+      "welcome": {
+        "title": "Welcome",
+        "description": "Let's personalize your historical fact experience. This will help us provide you with the most relevant and interesting facts.",
+        "experienceLevelLabel": "What's your experience level with history?",
+        "factLengthLabel": "What length of facts do you prefer?"
+      },
+      "historicalPeriods": {
+        "title": "Historical Periods",
+        "description": "Which historical periods interest you most?",
+        "timePeriodsLabel": "Select historical periods:"
+      },
+      "topics": {
+        "title": "Topics",
+        "description": "What types of historical topics fascinate you?",
+        "topicsLabel": "Select topics:",
+        "loading": "Loading topics...",
+        "error": "Failed to load topics."
+      },
+      "learningGoalsRegions": {
+        "title": "Learning Goals & Regions",
+        "description": "Tell us more about your learning motivations and regional interests",
+        "learningMotivationsLabel": "Why are you interested in learning about history?",
+        "regionsLabel": "Which regions of the world interest you most?",
+        "figuresLabel": "Are there any specific historical figures you'd like to learn more about?",
+        "figuresPlaceholder": "e.g., Napoleon, Cleopatra, Leonardo da Vinci..."
+      },
+      "languagePreferences": {
+        "title": "Language Preferences",
+        "description": "What language do you prefer to read in?",
+        "languageLabel": "Select your preferred language:"
+      },
+      "finalThoughts": {
+        "title": "Final Thoughts",
+        "description": "Is there anything else you'd like us to know about your historical interests?",
+        "openEndedLabel": "Tell us more:",
+        "openEndedPlaceholder": "e.g., The history of Italy, The history of South America..."
+      },
+      "completed": {
+        "title": "Completed",
+        "description": "You've completed the questionnaire. We'll use your responses to personalize your historical fact experience."
+      }
+    }
+  },
+  "success": {
+    "title": "Setup Complete!",
+    "description": "Your historical journey is ready to begin. We've personalized your experience based on your interests.",
+    "whatsNext": "What's Next?",
+    "features": {
+      "dailyFacts": "Daily historical facts tailored to your interests",
+      "recommendations": "Personalized learning recommendations",
+      "progress": "Track your learning progress"
+    },
+    "goToDashboard": "Go to Dashboard",
+    "redirecting": "Automatically redirecting in",
+    "seconds": "seconds"
+  },
+  "notifications": {
+    "title": "Notification Settings",
+    "subtitle": "Notification settings for daily historical facts",
+    "dailyNotifications": "Daily Notifications",
+    "notificationTime": "Notification Time",
+    "manageNotifications": "Manage Notifications",
+    "viewAnalysis": "View Analysis",
+    "pushNotifications": "Push Notifications",
+    "pushNotificationsSubscribed": "You are subscribed to push notifications",
+    "pushNotificationsNotSubscribed": "You are not subscribed to push notifications",
+    "unsubscribe": "Unsubscribe",
+    "subscribe": "Subscribe",
+    "inYourTimezone": "In your timezone",
+    "currentTimeInTimezone": "The current time in your timezone is:",
+    "settingsSavedSuccessfully": "Settings saved successfully!",
+    "errorSavingSettings": "An error occurred while saving the settings. Please try again.",
+    "understandingTheNotificationSystem": "To understand how the notification system works, follow these steps:",
+    "howItWorks": "How It Works",
+    "chooseWhenYouWantToReceiveNotifications": "Choose when you want to receive notifications",
+    "setYourTime": "Set your time",
+    "dailyFactGeneration": "Generate a daily historical fact",
+    "receiveYourFactAtTheScheduledTime": "Receive your fact at the scheduled time",
+    "notificationDelivery": "Notification Delivery",
+    "currentNotificationCapabilities": "Current notification capabilities",
+    "pushNotificationsOnAllDevices": "Push notifications on all devices",
+    "customizableNotificationTime": "Customizable notification time",
+    "timezoneSupport": "Timezone support",
+    "timezone": "Timezone",
+    "pwaInstallationSupport": "PWA installation support",
+    "comingSoon": "Coming Soon",
+    "emailNotifications": "Email Notifications",
+    "customNotificationSounds": "Custom notification sounds",
+    "multipleNotificationTimes": "Multiple notification times",
+    "weekendPauseOptions": "Weekend pause options",
+    "yourNotificationPreferences": "Your notification preferences",
+    "currentStatus": "Current Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "notSet": "Not set",
+    "subscribed": "Subscribed",
+    "notSubscribed": "Not subscribed"
+  }
+}

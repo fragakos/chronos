@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,11 +15,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Eye, EyeOff, Lock, CheckCircle } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { type getDictionary } from "@/get-dictionary";
 
-export default function ResetPasswordPage() {
+export default function SignupClient({
+  dict,
+}: {
+  dict: Awaited<ReturnType<typeof getDictionary>>;
+}) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,52 +35,41 @@ export default function ResetPasswordPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  useEffect(() => {
-    // Check if user is authenticated
-    const checkUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/auth/login");
-      }
-    };
-    checkUser();
-  }, [router, supabase.auth]);
-
-  const handleResetPassword = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(dict.auth.signup.passwordsDoNotMatch);
       setLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long");
+      setError(dict.auth.signup.passwordTooShort);
       setLoading(false);
       return;
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: password,
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+        },
       });
 
       if (error) {
         setError(error.message);
       } else {
         setSuccess(true);
-        // Redirect to home page after 3 seconds
-        setTimeout(() => {
-          router.push("/");
-        }, 3000);
       }
     } catch {
-      setError("An unexpected error occurred");
+      setError(dict.auth.signup.unexpectedError);
     } finally {
       setLoading(false);
     }
@@ -84,22 +81,24 @@ export default function ResetPasswordPage() {
         <div className="max-w-md w-full space-y-8">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center  flex items-center justify-center">
-                <CheckCircle className="mr-2 h-6 w-6" />
-                Password updated
+              <CardTitle className="text-2xl text-center">
+                {dict.auth.signup.checkYourEmail}
               </CardTitle>
               <CardDescription className="text-center">
-                Your password has been successfully updated.
+                {dict.auth.signup.checkYourEmailDescription}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm  text-center">
-                You will be redirected to the home page in a few seconds.
+              <p className="text-sm text-center">
+                {dict.auth.signup.checkYourEmailMessage}
               </p>
             </CardContent>
             <CardFooter className="flex justify-center">
-              <Button onClick={() => router.push("/")} className="w-full">
-                Go to home page
+              <Button
+                variant="outline"
+                onClick={() => router.push("/auth/login")}
+              >
+                {dict.auth.signup.backToLogin}
               </Button>
             </CardFooter>
           </Card>
@@ -109,32 +108,64 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold ">Set new password</h1>
-          <p className="mt-2 text-sm ">Enter your new password below</p>
+          <h1 className="text-3xl font-bold">{dict.auth.signup.title}</h1>
+          <p className="mt-2 text-sm">{dict.auth.signup.subtitle}</p>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">
-              Reset password
+              {dict.auth.signup.cardTitle}
             </CardTitle>
             <CardDescription className="text-center">
-              Enter your new password to complete the reset process
+              {dict.auth.signup.cardDescription}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <form onSubmit={handleResetPassword} className="space-y-4">
+            <form onSubmit={handleSignup} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="password">New Password</Label>
+                <Label htmlFor="fullName">{dict.auth.signup.fullName}</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 " />
+                  <User className="absolute left-3 top-3 h-4 w-4" />
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder={dict.auth.signup.fullNamePlaceholder}
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">{dict.auth.signup.email}</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={dict.auth.signup.emailPlaceholder}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">{dict.auth.signup.password}</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your new password"
+                    placeholder={dict.auth.signup.passwordPlaceholder}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
@@ -143,7 +174,7 @@ export default function ResetPasswordPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3  "
+                    className="absolute right-3 top-3 hover:text-gray-600"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -155,13 +186,15 @@ export default function ResetPasswordPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                <Label htmlFor="confirmPassword">
+                  {dict.auth.signup.confirmPassword}
+                </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 " />
+                  <Lock className="absolute left-3 top-3 h-4 w-4" />
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your new password"
+                    placeholder={dict.auth.signup.confirmPasswordPlaceholder}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="pl-10 pr-10"
@@ -170,7 +203,7 @@ export default function ResetPasswordPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3  "
+                    className="absolute right-3 top-3 hover:text-gray-600"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -182,16 +215,29 @@ export default function ResetPasswordPage() {
               </div>
 
               {error && (
-                <div className="text-sm text-red-600  p-3 rounded-md">
+                <div className="text-sm text-red-600 p-3 rounded-md">
                   {error}
                 </div>
               )}
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Updating password..." : "Update password"}
+                {loading
+                  ? dict.auth.signup.creatingAccount
+                  : dict.auth.signup.createAccountButton}
               </Button>
             </form>
           </CardContent>
+          <CardFooter className="flex justify-center">
+            <div className="text-sm text-center">
+              {dict.auth.signup.alreadyHaveAccount}{" "}
+              <Link
+                href="/auth/login"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                {dict.auth.signup.signIn}
+              </Link>
+            </div>
+          </CardFooter>
         </Card>
       </div>
     </div>

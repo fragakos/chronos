@@ -2,12 +2,17 @@
 
 import { useRandomFact } from "./hooks/useRandomFact";
 import { RandomFactCard } from "./RandomFactCard";
+import { Locale } from "@/i18n-config";
 
 type RandomFactClientProps = {
   userId: string;
+  currentLang: Locale;
 };
 
-export const RandomFactClient = ({ userId }: RandomFactClientProps) => {
+export const RandomFactClient = ({
+  userId,
+  currentLang,
+}: RandomFactClientProps) => {
   const { fact, dailyFactId, loading, error, regenerating, handleThanks } =
     useRandomFact(userId);
 
@@ -22,6 +27,7 @@ export const RandomFactClient = ({ userId }: RandomFactClientProps) => {
             fact={fact}
             dailyFactId={dailyFactId}
             handleThanks={handleThanks}
+            currentLang={currentLang}
           />
         </div>
       </main>

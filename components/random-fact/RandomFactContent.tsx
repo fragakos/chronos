@@ -1,5 +1,9 @@
+import { Locale } from "@/i18n-config";
 import { MultiStepLoader as Loader } from "../ui/multi-step-loader";
-import { generatingFactStates } from "./utils/loadingStates";
+import {
+  generatingFactStatesEl,
+  generatingFactStatesEn,
+} from "./utils/loadingStates";
 import ReactMarkdown from "react-markdown";
 
 type RandomFactContentProps = {
@@ -7,6 +11,7 @@ type RandomFactContentProps = {
   regenerating: boolean;
   error: string | null;
   fact: string | null;
+  currentLang: Locale;
 };
 
 export const RandomFactContent = ({
@@ -14,9 +19,17 @@ export const RandomFactContent = ({
   regenerating,
   error,
   fact,
+  currentLang,
 }: RandomFactContentProps) => {
   if (loading || regenerating) {
-    return <Loader loadingStates={generatingFactStates} loading={loading} />;
+    return (
+      <Loader
+        loadingStates={
+          currentLang === "el" ? generatingFactStatesEl : generatingFactStatesEn
+        }
+        loading={loading}
+      />
+    );
   }
 
   if (error) {
@@ -24,7 +37,11 @@ export const RandomFactContent = ({
   }
 
   if (fact) {
-    return <ReactMarkdown>{fact}</ReactMarkdown>;
+    return (
+      <div className="text-lg leading-relaxed text-left p-4 bg-[#E7CCB1]/10 rounded-lg m-3">
+        <ReactMarkdown>{fact}</ReactMarkdown>
+      </div>
+    );
   }
 
   return null;

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -36,9 +37,9 @@
   --sidebar-accent-foreground: oklch(0.325 0 0);
   --sidebar-border: oklch(0.9401 0 0);
   --sidebar-ring: oklch(0.7731 0 0);
-  --font-sans: Libre Baskerville, serif;
-  --font-serif: Space Grotesk, serif;
-  --font-mono: Open Sans, sans-serif;
+  --font-sans: "Poppins", sans-serif;
+  --font-serif: "Poppins", serif;
+  --font-mono: "Poppins", monospace;
   --radius: 1.45rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.09);
@@ -89,9 +90,9 @@
   --sidebar-accent-foreground: oklch(0.9674 0.0013 286.3752);
   --sidebar-border: oklch(0.2739 0.0055 286.0326);
   --sidebar-ring: oklch(0.8711 0.0055 286.286);
-  --font-sans: Libre Baskerville, serif;
-  --font-serif: Space Grotesk, serif;
-  --font-mono: Open Sans, sans-serif;
+  --font-sans: "Poppins", sans-serif;
+  --font-serif: "Poppins", serif;
+  --font-mono: "Poppins", monospace;
   --radius: 1.45rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.09);
@@ -175,9 +176,14 @@ body {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: "Poppins";
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     letter-spacing: var(--tracking-normal);
+    font-family: "Poppins";
+  }
+  html {
+    font-family: "Poppins";
   }
 }

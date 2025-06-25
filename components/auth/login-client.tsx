@@ -17,8 +17,13 @@ import {
 } from "@/components/ui/card";
 // import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { type getDictionary } from "@/get-dictionary";
 
-export default function LoginPage() {
+export default function LoginClient({
+  dict,
+}: {
+  dict: Awaited<ReturnType<typeof getDictionary>>;
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -80,27 +85,29 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold ">Welcome back</h1>
-          <p className="mt-2 text-sm ">Sign in to your account to continue</p>
+          <h1 className="text-3xl font-bold ">{dict.auth.login.title}</h1>
+          <p className="mt-2 text-sm ">{dict.auth.login.subtitle}</p>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Sign in</CardTitle>
+            <CardTitle className="text-2xl text-center">
+              {dict.auth.login.cardTitle}
+            </CardTitle>
             <CardDescription className="text-center">
-              Enter your email and password to sign in to your account
+              {dict.auth.login.cardDescription}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{dict.auth.login.email}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={dict.auth.login.emailPlaceholder}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
@@ -110,13 +117,13 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{dict.auth.login.password}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 " />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={dict.auth.login.passwordPlaceholder}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
@@ -143,7 +150,9 @@ export default function LoginPage() {
               )}
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
+                {loading
+                  ? dict.auth.login.signingIn
+                  : dict.auth.login.signInButton}
               </Button>
             </form>
 
@@ -171,12 +180,12 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">
             <div className="text-sm text-center ">
-              Don&apos;t have an account?{" "}
+              {dict.auth.login.dontHaveAccount}
               <Link
                 href="/auth/signup"
                 className="font-medium text-blue-600 hover:text-blue-500"
               >
-                Sign up
+                {dict.auth.login.signUp}
               </Link>
             </div>
             <div className="text-sm text-center ">
@@ -184,7 +193,7 @@ export default function LoginPage() {
                 href="/auth/forgot-password"
                 className="font-medium text-blue-600 hover:text-blue-500"
               >
-                Forgot your password?
+                {dict.auth.login.forgotPassword}
               </Link>
             </div>
           </CardFooter>

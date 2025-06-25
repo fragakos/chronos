@@ -6,9 +6,14 @@ import { createClient } from "@/utils/supabase/client";
 import { DashboardWelcome } from "./DashboardWelcome";
 import { DashboardProfileSummary } from "./DashboardProfileSummary";
 import { DashboardQuickActions } from "./DashboardQuickActions";
+import { getDictionary } from "@/get-dictionary";
+import { Locale } from "@/i18n-config";
+import { SimpleLoader } from "../ui/simple-loader";
 
 interface DashboardMainProps {
   user: User;
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: Locale;
 }
 
 interface UserProfile {
@@ -20,7 +25,7 @@ interface UserProfile {
   timezone: string;
 }
 
-export function DashboardMain({ user }: DashboardMainProps) {
+export function DashboardMain({ user, dictionary, lang }: DashboardMainProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -57,7 +62,7 @@ export function DashboardMain({ user }: DashboardMainProps) {
     if (!isDrawerOpen) return;
     const fetchAnalysis = async () => {
       setAnalysisLoading(true);
-      setAnalysis(null);
+
       try {
         const supabase = createClient();
         const { data, error } = await supabase
@@ -80,8 +85,8 @@ export function DashboardMain({ user }: DashboardMainProps) {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-gray-600">Loading your dashboard...</div>
+      <div className="flex justify-center items-center h-[calc(100vh-10rem)]">
+        <SimpleLoader />
       </div>
     );
   }
@@ -89,7 +94,7 @@ export function DashboardMain({ user }: DashboardMainProps) {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Welcome Section */}
-      <DashboardWelcome user={user} />
+      <DashboardWelcome user={user} dictionary={dictionary} lang={lang} />
 
       {/* User Profile Summary */}
       {userProfile && (
@@ -99,6 +104,7 @@ export function DashboardMain({ user }: DashboardMainProps) {
           analysisLoading={analysisLoading}
           isDrawerOpen={isDrawerOpen}
           setIsDrawerOpen={setIsDrawerOpen}
+          dictionary={dictionary}
         />
       )}
 
@@ -110,7 +116,7 @@ export function DashboardMain({ user }: DashboardMainProps) {
       /> */}
 
       {/* Quick Actions */}
-      <DashboardQuickActions />
+      <DashboardQuickActions dictionary={dictionary} />
     </div>
   );
 }

@@ -1,15 +1,18 @@
 import { Button } from "@/components/ui/button";
+import { Locale } from "@/i18n-config";
 
 type RandomFactActionsProps = {
   fact: string | null;
   dailyFactId: number | null;
   handleThanks: () => Promise<void>;
+  currentLang: Locale;
 };
 
 export const RandomFactActions = ({
   fact,
   dailyFactId,
   handleThanks,
+  currentLang,
 }: RandomFactActionsProps) => {
   if (!fact || dailyFactId === null) {
     return null;
@@ -24,7 +27,7 @@ export const RandomFactActions = ({
         aria-label="Back to Dashboard"
         type="button"
       >
-        Thanks!
+        {currentLang === "el" ? "Ευχαριστώ!" : "Thanks!"}
       </Button>
     </div>
   );

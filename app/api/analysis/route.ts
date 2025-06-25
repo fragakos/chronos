@@ -13,7 +13,6 @@ export async function POST(req: Request) {
   const { answers, user_id, onboarding_response_id } = await req.json();
 
   const analysis_prompt = createPrompt(answers);
-
   // Call OpenAI (non-streaming) using generateText
   const result = await generateText({
     model: openai("gpt-4o"),

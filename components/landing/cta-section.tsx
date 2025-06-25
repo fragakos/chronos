@@ -6,10 +6,20 @@ import { ArrowRight, Clock, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { type getDictionary } from "@/get-dictionary";
+import { type Locale } from "@/i18n-config";
 
-const CTASection = () => {
+const CTASection = ({
+  dictionary,
+  currentLang,
+}: {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  currentLang: Locale;
+}) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const { landing } = dictionary;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -58,12 +68,10 @@ const CTASection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Start Your Historical Journey Today
+            {landing.cta.title}
           </h2>
           <p className="text-xl text-primary-foreground/90 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of learners who are discovering fascinating
-            historical facts in just 10 minutes a day. Perfect for busy
-            professionals, students, and history enthusiasts.
+            {landing.cta.subtitle}
           </p>
         </motion.div>
 
@@ -78,11 +86,10 @@ const CTASection = () => {
               <CardContent className="p-6 text-center">
                 <Clock className="h-12 w-12 mx-auto mb-4 text-primary-foreground/80" />
                 <h3 className="text-xl font-semibold mb-2">
-                  Quick Daily Doses
+                  {landing.cta.features.quickDailyDoses.title}
                 </h3>
                 <p className="text-primary-foreground/80">
-                  Get your historical knowledge fix in just 10 minutes - perfect
-                  for coffee breaks, commutes, or bedtime reading.
+                  {landing.cta.features.quickDailyDoses.description}
                 </p>
               </CardContent>
             </Card>
@@ -92,10 +99,11 @@ const CTASection = () => {
             <Card className="bg-card/10 backdrop-blur-sm border-border/20">
               <CardContent className="p-6 text-center">
                 <Star className="h-12 w-12 mx-auto mb-4 text-primary-foreground/80" />
-                <h3 className="text-xl font-semibold mb-2">Curated Content</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  {landing.cta.features.curatedContent.title}
+                </h3>
                 <p className="text-primary-foreground/80">
-                  Expertly researched facts and insights from world-renowned
-                  historians and scholars.
+                  {landing.cta.features.curatedContent.description}
                 </p>
               </CardContent>
             </Card>
@@ -106,11 +114,10 @@ const CTASection = () => {
               <CardContent className="p-6 text-center">
                 <ArrowRight className="h-12 w-12 mx-auto mb-4 text-primary-foreground/80" />
                 <h3 className="text-xl font-semibold mb-2">
-                  Personalized Experience
+                  {landing.cta.features.personalizedExperience.title}
                 </h3>
                 <p className="text-primary-foreground/80">
-                  Choose your interests and get content tailored specifically to
-                  what fascinates you most.
+                  {landing.cta.features.personalizedExperience.description}
                 </p>
               </CardContent>
             </Card>
@@ -125,11 +132,10 @@ const CTASection = () => {
         >
           <div className="bg-card/10 backdrop-blur-sm rounded-2xl p-8 border border-border/20 max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold mb-4">
-              Ready to Transform Your Daily Routine?
+              {landing.cta.finalCta.title}
             </h3>
             <p className="text-primary-foreground/80 mb-6">
-              Sign up now and get your first daily historical fact tomorrow
-              morning. It&apos;s completely free to start your journey.
+              {landing.cta.finalCta.description}
             </p>
             <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center"
@@ -138,24 +144,24 @@ const CTASection = () => {
               animate={isInView ? "visible" : "hidden"}
             >
               <motion.div variants={itemVariants}>
-                <Link href="/auth/signup">
+                <Link href={`/${currentLang}/auth/signup`}>
                   <Button
                     size="lg"
                     className="bg-card text-card-foreground hover:bg-card/90 px-8 py-3 text-lg font-semibold"
                   >
-                    Get Started Free
+                    {landing.cta.finalCta.getStartedFree}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
               </motion.div>
               <motion.div variants={itemVariants}>
-                <Link href="/auth/login">
+                <Link href={`/${currentLang}/auth/login`}>
                   <Button
                     size="lg"
                     variant="outline"
                     className="border-border/30 text-primary-foreground hover:bg-card/10 px-8 py-3 text-lg"
                   >
-                    I Already Have an Account
+                    {landing.cta.finalCta.alreadyHaveAccount}
                   </Button>
                 </Link>
               </motion.div>

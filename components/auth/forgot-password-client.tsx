@@ -15,8 +15,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Mail, ArrowLeft } from "lucide-react";
+import { type getDictionary } from "@/get-dictionary";
 
-export default function ForgotPasswordPage() {
+export default function ForgotPasswordClient({
+  dict,
+}: {
+  dict: Awaited<ReturnType<typeof getDictionary>>;
+}) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +44,7 @@ export default function ForgotPasswordPage() {
         setSuccess(true);
       }
     } catch {
-      setError("An unexpected error occurred");
+      setError(dict.auth.forgotPassword.unexpectedError);
     } finally {
       setLoading(false);
     }
@@ -47,28 +52,27 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center ">
-                Check your email
+              <CardTitle className="text-2xl text-center">
+                {dict.auth.forgotPassword.success.title}
               </CardTitle>
               <CardDescription className="text-center">
-                We&apos;ve sent you a password reset link to your email address.
+                {dict.auth.forgotPassword.success.description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm  text-center">
-                Please check your email and click the reset link to set a new
-                password.
+              <p className="text-sm text-center">
+                {dict.auth.forgotPassword.success.message}
               </p>
             </CardContent>
             <CardFooter className="flex justify-center">
               <Link href="/auth/login">
                 <Button variant="outline">
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to login
+                  {dict.auth.forgotPassword.success.backToLogin}
                 </Button>
               </Link>
             </CardFooter>
@@ -79,35 +83,34 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center  py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold ">Reset your password</h1>
-          <p className="mt-2 text-sm ">
-            Enter your email address and we&apos;ll send you a link to reset
-            your password
-          </p>
+          <h1 className="text-3xl font-bold">
+            {dict.auth.forgotPassword.title}
+          </h1>
+          <p className="mt-2 text-sm">{dict.auth.forgotPassword.subtitle}</p>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">
-              Forgot password
+              {dict.auth.forgotPassword.cardTitle}
             </CardTitle>
             <CardDescription className="text-center">
-              Enter your email address to receive a password reset link
+              {dict.auth.forgotPassword.cardDescription}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{dict.auth.forgotPassword.email}</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 " />
+                  <Mail className="absolute left-3 top-3 h-4 w-4" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={dict.auth.forgotPassword.emailPlaceholder}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
@@ -117,13 +120,15 @@ export default function ForgotPasswordPage() {
               </div>
 
               {error && (
-                <div className="text-sm text-red-600  p-3 rounded-md">
+                <div className="text-sm text-red-600 p-3 rounded-md">
                   {error}
                 </div>
               )}
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Sending reset link..." : "Send reset link"}
+                {loading
+                  ? dict.auth.forgotPassword.sendingResetLink
+                  : dict.auth.forgotPassword.sendResetLink}
               </Button>
             </form>
           </CardContent>
@@ -133,7 +138,7 @@ export default function ForgotPasswordPage() {
               className="text-sm text-blue-600 hover:text-blue-500 flex items-center"
             >
               <ArrowLeft className="mr-1 h-4 w-4" />
-              Back to login
+              {dict.auth.forgotPassword.backToLogin}
             </Link>
           </CardFooter>
         </Card>

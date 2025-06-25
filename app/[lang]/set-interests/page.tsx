@@ -2,8 +2,16 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { InterestQuestionnaire } from "@/components/dashboard/interest-questionnaire";
+import { getDictionary } from "@/get-dictionary";
+import { Locale } from "@/i18n-config";
 
-export default async function SetInterestsPage() {
+export default async function SetInterestsPage({
+  params,
+}: {
+  params: Promise<{ lang: Locale }>;
+}) {
+  const { lang } = await params;
+  const dictionary = await getDictionary(lang);
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
@@ -12,7 +20,7 @@ export default async function SetInterestsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/auth/login");
+    redirect(`/${lang}/auth/login`);
   }
 
   // Check if user has completed onboarding
@@ -30,6 +38,8 @@ export default async function SetInterestsPage() {
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <InterestQuestionnaire
           hasCompletedOnboarding={hasCompletedOnboarding}
+          dictionary={dictionary}
+          lang={lang}
         />
       </main>
     </div>

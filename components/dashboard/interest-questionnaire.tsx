@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,20 +22,28 @@ import {
   timePeriods,
   learningMotivations,
   regions,
+  languages,
   questionnaireSteps,
 } from "./utils/form-logic";
 import { getInterestCategories } from "@/requests/supabase/getInterestCategories";
 import { submissionLoadingStates } from "./utils/loadingStates";
+import { getDictionary } from "@/get-dictionary";
+import { type Locale } from "@/i18n-config";
+
 interface InterestQuestionnaireProps {
   hasCompletedOnboarding: boolean;
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: Locale;
 }
 
 export function InterestQuestionnaire({
   hasCompletedOnboarding,
+  dictionary,
+  lang,
 }: InterestQuestionnaireProps) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const languages = ["English", "Greek"];
   const [formData, setFormData] = useState<QuestionnaireData>({
     experience_level: "beginner",
     preferred_fact_length: "medium",
@@ -107,7 +116,7 @@ export function InterestQuestionnaire({
       });
       const interestAnalysisData = await interestAnalysis.json();
       if (interestAnalysisData.success) {
-        window.location.reload();
+        router.push(`/${lang}/success`);
       } else {
         alert("There was an error saving your responses. Please try again.");
       }
@@ -125,18 +134,18 @@ export function InterestQuestionnaire({
         return (
           <Card className="bg-card text-card-foreground shadow-md border border-border">
             <CardHeader>
-              <CardTitle>{questionnaireSteps[1].title}</CardTitle>
+              <CardTitle>{questionnaireSteps(dictionary)[1].title}</CardTitle>
               <CardDescription>
-                {questionnaireSteps[1].description}
+                {questionnaireSteps(dictionary)[1].description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
               <div>
                 <Label htmlFor="experience" className="font-semibold">
-                  {questionnaireSteps[1].experienceLevelLabel}
+                  {questionnaireSteps(dictionary)[1].experienceLevelLabel}
                 </Label>
                 <div className="mt-3 flex flex-col gap-2">
-                  {experienceLevels.map((level) => (
+                  {experienceLevels(dictionary).map((level) => (
                     <label
                       key={level.value}
                       className="flex items-center gap-2 cursor-pointer rounded-lg px-3 py-2 transition-colors border border-border hover:bg-muted focus-within:ring-2 focus-within:ring-ring"
@@ -166,10 +175,10 @@ export function InterestQuestionnaire({
               </div>
               <div>
                 <Label htmlFor="factLength" className="font-semibold">
-                  {questionnaireSteps[1].factLengthLabel}
+                  {questionnaireSteps(dictionary)[1].factLengthLabel}
                 </Label>
                 <div className="mt-3 flex flex-col gap-2">
-                  {factLengths.map((length) => (
+                  {factLengths(dictionary).map((length) => (
                     <label
                       key={length.value}
                       className="flex items-center gap-2 cursor-pointer rounded-lg px-3 py-2 transition-colors border border-border hover:bg-muted focus-within:ring-2 focus-within:ring-ring"
@@ -222,33 +231,37 @@ export function InterestQuestionnaire({
         return (
           <Card className="bg-card text-card-foreground shadow-md border border-border">
             <CardHeader>
-              <CardTitle>{questionnaireSteps[2].title}</CardTitle>
+              <CardTitle>{questionnaireSteps(dictionary)[2].title}</CardTitle>
               <CardDescription>
-                {questionnaireSteps[2].description}
+                {questionnaireSteps(dictionary)[2].description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {timePeriods.map((period) => (
+                {timePeriods(dictionary).map((period) => (
                   <label
-                    key={period}
+                    key={period.value}
                     className="flex items-center gap-2 cursor-pointer rounded-lg px-3 py-2 border border-border hover:bg-muted focus-within:ring-2 focus-within:ring-ring"
                     tabIndex={0}
-                    aria-label={period}
+                    aria-label={period.label}
                     onKeyDown={(e) =>
                       handleKeyDown(e, () =>
-                        handleMultiSelect("time_periods", period)
+                        handleMultiSelect("time_periods", period.value)
                       )
                     }
                   >
                     <input
                       type="checkbox"
-                      checked={formData.time_periods.includes(period)}
-                      onChange={() => handleMultiSelect("time_periods", period)}
+                      checked={formData.time_periods.includes(period.value)}
+                      onChange={() =>
+                        handleMultiSelect("time_periods", period.value)
+                      }
                       className="accent-primary focus:ring-2 focus:ring-ring"
-                      aria-checked={formData.time_periods.includes(period)}
+                      aria-checked={formData.time_periods.includes(
+                        period.value
+                      )}
                     />
-                    <span className="text-sm">{period}</span>
+                    <span className="text-sm">{period.label}</span>
                   </label>
                 ))}
               </div>
@@ -274,15 +287,15 @@ export function InterestQuestionnaire({
         return (
           <Card className="bg-card text-card-foreground shadow-md border border-border">
             <CardHeader>
-              <CardTitle>{questionnaireSteps[3].title}</CardTitle>
+              <CardTitle>{questionnaireSteps(dictionary)[3].title}</CardTitle>
               <CardDescription>
-                {questionnaireSteps[3].description}
+                {questionnaireSteps(dictionary)[3].description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
               {topicsLoading ? (
                 <div className="text-center text-muted-foreground">
-                  {questionnaireSteps[3].loading}
+                  {questionnaireSteps(dictionary)[3].loading}
                 </div>
               ) : topicsError ? (
                 <div className="text-center text-destructive">
@@ -309,7 +322,13 @@ export function InterestQuestionnaire({
                         className="accent-primary focus:ring-2 focus:ring-ring"
                         aria-checked={formData.topics.includes(topic)}
                       />
-                      <span className="text-sm">{topic}</span>
+                      <span className="text-sm">
+                        {
+                          dictionary.questionnaire.topics[
+                            topic as keyof typeof dictionary.questionnaire.topics
+                          ]
+                        }
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -336,87 +355,97 @@ export function InterestQuestionnaire({
         return (
           <Card className="bg-card text-card-foreground shadow-md border border-border">
             <CardHeader>
-              <CardTitle>{questionnaireSteps[4].title}</CardTitle>
+              <CardTitle>{questionnaireSteps(dictionary)[4].title}</CardTitle>
               <CardDescription>
-                {questionnaireSteps[4].description}
+                {questionnaireSteps(dictionary)[4].description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
               <div>
                 <Label className="font-semibold">
-                  {questionnaireSteps[4].learningMotivationsLabel}
+                  {questionnaireSteps(dictionary)[4].learningMotivationsLabel}
                 </Label>
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {learningMotivations.map((motivation) => (
+                  {learningMotivations(dictionary).map((motivation) => (
                     <label
-                      key={motivation}
+                      key={motivation.value}
                       className="flex items-center gap-2 cursor-pointer rounded-lg px-3 py-2 border border-border hover:bg-muted focus-within:ring-2 focus-within:ring-ring"
                       tabIndex={0}
-                      aria-label={motivation}
+                      aria-label={motivation.label}
                       onKeyDown={(e) =>
                         handleKeyDown(e, () =>
-                          handleMultiSelect("learning_motivations", motivation)
+                          handleMultiSelect(
+                            "learning_motivations",
+                            motivation.value
+                          )
                         )
                       }
                     >
                       <input
                         type="checkbox"
                         checked={formData.learning_motivations.includes(
-                          motivation
+                          motivation.value
                         )}
                         onChange={() =>
-                          handleMultiSelect("learning_motivations", motivation)
+                          handleMultiSelect(
+                            "learning_motivations",
+                            motivation.value
+                          )
                         }
                         className="accent-primary focus:ring-2 focus:ring-ring"
                         aria-checked={formData.learning_motivations.includes(
-                          motivation
+                          motivation.value
                         )}
                       />
-                      <span className="text-sm">{motivation}</span>
+                      <span className="text-sm">{motivation.label}</span>
                     </label>
                   ))}
                 </div>
               </div>
               <div>
                 <Label className="font-semibold">
-                  {questionnaireSteps[4].regionsLabel}
+                  {questionnaireSteps(dictionary)[4].regionsLabel}
                 </Label>
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {regions.map((region) => (
+                  {regions(dictionary).map((region) => (
                     <label
-                      key={region}
+                      key={region.value}
                       className="flex items-center gap-2 cursor-pointer rounded-lg px-3 py-2 border border-border hover:bg-muted focus-within:ring-2 focus-within:ring-ring"
                       tabIndex={0}
-                      aria-label={region}
+                      aria-label={region.label}
                       onKeyDown={(e) =>
                         handleKeyDown(e, () =>
-                          handleMultiSelect("regional_interests", region)
+                          handleMultiSelect("regional_interests", region.value)
                         )
                       }
                     >
                       <input
                         type="checkbox"
-                        checked={formData.regional_interests.includes(region)}
+                        checked={formData.regional_interests.includes(
+                          region.value
+                        )}
                         onChange={() =>
-                          handleMultiSelect("regional_interests", region)
+                          handleMultiSelect("regional_interests", region.value)
                         }
                         className="accent-primary focus:ring-2 focus:ring-ring"
                         aria-checked={formData.regional_interests.includes(
-                          region
+                          region.value
                         )}
                       />
-                      <span className="text-sm">{region}</span>
+                      <span className="text-sm">{region.label}</span>
                     </label>
                   ))}
                 </div>
               </div>
               <div>
                 <Label htmlFor="figures" className="font-semibold">
-                  {questionnaireSteps[4].figuresLabel}
+                  {questionnaireSteps(dictionary)[4].figuresLabel}
                 </Label>
                 <Input
                   id="figures"
-                  placeholder={questionnaireSteps[4].figuresPlaceholder}
+                  placeholder={
+                    questionnaireSteps(dictionary)[4].figuresPlaceholder
+                  }
                   value={formData.historical_figures}
                   onChange={(e) =>
                     handleInputChange("historical_figures", e.target.value)
@@ -447,41 +476,41 @@ export function InterestQuestionnaire({
         return (
           <Card className="bg-card text-card-foreground shadow-md border border-border">
             <CardHeader>
-              <CardTitle>{questionnaireSteps[5].title}</CardTitle>
+              <CardTitle>{questionnaireSteps(dictionary)[5].title}</CardTitle>
               <CardDescription>
-                {questionnaireSteps[5].description}
+                {questionnaireSteps(dictionary)[5].description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
               <div>
                 <Label htmlFor="language" className="font-semibold">
-                  {questionnaireSteps[5].languageLabel}
+                  {questionnaireSteps(dictionary)[5].languageLabel}
                 </Label>
                 <div className="mt-3 flex flex-col gap-2">
-                  {languages.map((language) => (
+                  {languages().map((language) => (
                     <label
-                      key={language}
+                      key={language.value}
                       className="flex items-center gap-2 cursor-pointer rounded-lg px-3 py-2 border border-border hover:bg-muted focus-within:ring-2 focus-within:ring-ring"
                       tabIndex={0}
-                      aria-label={language}
+                      aria-label={language.label}
                       onKeyDown={(e) =>
                         handleKeyDown(e, () =>
-                          handleInputChange("language", language)
+                          handleInputChange("language", language.value)
                         )
                       }
                     >
                       <input
                         type="radio"
                         name="language"
-                        value={language}
-                        checked={formData.language === language}
+                        value={language.value}
+                        checked={formData.language === language.value}
                         onChange={(e) =>
                           handleInputChange("language", e.target.value)
                         }
                         className="accent-primary focus:ring-2 focus:ring-ring"
-                        aria-checked={formData.language === language}
+                        aria-checked={formData.language === language.value}
                       />
-                      <span className="text-sm">{language}</span>
+                      <span className="text-sm">{language.label}</span>
                     </label>
                   ))}
                 </div>
@@ -508,19 +537,21 @@ export function InterestQuestionnaire({
         return (
           <Card className="bg-card text-card-foreground shadow-md border border-border">
             <CardHeader>
-              <CardTitle>{questionnaireSteps[6].title}</CardTitle>
+              <CardTitle>{questionnaireSteps(dictionary)[6].title}</CardTitle>
               <CardDescription>
-                {questionnaireSteps[6].description}
+                {questionnaireSteps(dictionary)[6].description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
               <div>
                 <Label htmlFor="openEnded" className="font-semibold">
-                  {questionnaireSteps[6].openEndedLabel}
+                  {questionnaireSteps(dictionary)[6].openEndedLabel}
                 </Label>
                 <Textarea
                   id="openEnded"
-                  placeholder={questionnaireSteps[6].openEndedPlaceholder}
+                  placeholder={
+                    questionnaireSteps(dictionary)[6].openEndedPlaceholder
+                  }
                   value={formData.open_ended_response}
                   onChange={(e) =>
                     handleInputChange("open_ended_response", e.target.value)
@@ -564,9 +595,11 @@ export function InterestQuestionnaire({
         {hasCompletedOnboarding && (
           <Card className="mb-6 bg-card text-card-foreground border border-border">
             <CardHeader>
-              <CardTitle>{questionnaireSteps.completed.title}</CardTitle>
+              <CardTitle>
+                {questionnaireSteps(dictionary).completed.title}
+              </CardTitle>
               <CardDescription>
-                {questionnaireSteps.completed.description}
+                {questionnaireSteps(dictionary).completed.description}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -591,7 +624,8 @@ export function InterestQuestionnaire({
             ))}
           </div>
           <p className="text-sm text-muted-foreground mt-2">
-            Step {currentStep} of {Object.keys(questionnaireSteps).length - 1}
+            Step {currentStep} of{" "}
+            {Object.keys(questionnaireSteps(dictionary)).length - 1}
           </p>
         </div>
       </div>

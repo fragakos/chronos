@@ -10,13 +10,20 @@ import Link from "next/link";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Sparkles, Settings, BookOpen, Bell } from "lucide-react";
+import { getDictionary } from "@/get-dictionary";
 
-export const DashboardQuickActions = () => (
+export const DashboardQuickActions = ({
+  dictionary,
+}: {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+}) => (
   <Card>
     <CardHeader className="pb-4 sm:pb-6">
-      <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
+      <CardTitle className="text-lg sm:text-xl">
+        {dictionary.dashboard.main.quickActions.title}
+      </CardTitle>
       <CardDescription className="text-sm sm:text-base">
-        Common tasks and features
+        {dictionary.dashboard.main.quickActions.subtitle}
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -28,7 +35,9 @@ export const DashboardQuickActions = () => (
         >
           <Link href="/random-fact">
             <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
-            <span className="text-xs sm:text-sm">Random Fact</span>
+            <span className="text-xs sm:text-sm">
+              {dictionary.dashboard.main.quickActions.randomFact}
+            </span>
           </Link>
         </Button>
         <Button
@@ -38,7 +47,9 @@ export const DashboardQuickActions = () => (
         >
           <Link href="/set-interests">
             <Settings className="h-5 w-5 sm:h-6 sm:w-6" />
-            <span className="text-xs sm:text-sm">Update Interests</span>
+            <span className="text-xs sm:text-sm">
+              {dictionary.dashboard.main.quickActions.updateInterests}
+            </span>
           </Link>
         </Button>
         {/* <Button
@@ -48,7 +59,9 @@ export const DashboardQuickActions = () => (
         >
           <Link href="/history">
             <BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
-            <span className="text-xs sm:text-sm">View History</span>
+            <span className="text-xs sm:text-sm">
+              {dictionary.dashboard.main.quickActions.viewHistory}
+            </span>
           </Link>
         </Button>
         <Button
@@ -58,7 +71,9 @@ export const DashboardQuickActions = () => (
         >
           <Link href="/notifications">
             <Bell className="h-5 w-5 sm:h-6 sm:w-6" />
-            <span className="text-xs sm:text-sm">Notifications</span>
+            <span className="text-xs sm:text-sm">
+              {dictionary.dashboard.main.quickActions.notifications}
+            </span>
           </Link>
         </Button> */}
       </div>

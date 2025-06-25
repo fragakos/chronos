@@ -28,9 +28,16 @@ import {
 } from "lucide-react";
 import { TIMEZONES } from "./timezones";
 import { subscribeUser, unsubscribeUser } from "@/app/actions";
+import { SimpleLoader } from "@/components/ui/simple-loader";
+import { getDictionary } from "@/get-dictionary";
+import { Locale } from "@/i18n-config";
+import { Trio } from "ldrs/react";
+import "ldrs/react/Trio.css";
 
 interface NotificationSettingsProps {
   user: User;
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  lang: Locale;
 }
 
 interface UserProfile {
@@ -44,6 +51,9 @@ interface UserProfile {
 
 export default function NotificationSettingsPage({
   user,
+  dictionary,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  lang,
 }: NotificationSettingsProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -251,8 +261,8 @@ export default function NotificationSettingsPage({
     return (
       <div className="min-h-screen ">
         <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="">Loading notification settings...</div>
+          <div className="flex justify-center items-center h-[calc(100vh-10rem)]">
+            <SimpleLoader />
           </div>
         </main>
       </div>
@@ -265,11 +275,10 @@ export default function NotificationSettingsPage({
         <div className="space-y-6">
           {/* Page Header */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-2">Notification Settings</h2>
-            <p className="">
-              Configure when you&apos;d like to receive your daily historical
-              facts
-            </p>
+            <h2 className="text-3xl font-bold mb-2">
+              {dictionary.notifications.title}
+            </h2>
+            <p className="">{dictionary.notifications.subtitle}</p>
           </div>
 
           {/* Main Settings Card */}
@@ -277,11 +286,10 @@ export default function NotificationSettingsPage({
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Bell className="h-5 w-5" />
-                <span>Daily Notifications</span>
+                <span>{dictionary.notifications.dailyNotifications}</span>
               </CardTitle>
               <CardDescription>
-                Subscribe to receive daily historical facts as push
-                notifications at your preferred time
+                {dictionary.notifications.notificationTime}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -293,12 +301,14 @@ export default function NotificationSettingsPage({
                       <Smartphone className="h-5 w-5 text-blue-600" />
                       <div>
                         <p className="font-medium text-blue-900 dark:text-blue-100">
-                          Push Notifications
+                          {dictionary.notifications.pushNotifications}
                         </p>
                         <p className="text-sm text-blue-700 dark:text-blue-300">
                           {pushSubscription
-                            ? "You're subscribed to receive push notifications"
-                            : "Subscribe to receive notifications on this device"}
+                            ? dictionary.notifications
+                                .pushNotificationsSubscribed
+                            : dictionary.notifications
+                                .pushNotificationsNotSubscribed}
                         </p>
                       </div>
                     </div>
@@ -309,11 +319,11 @@ export default function NotificationSettingsPage({
                           variant="outline"
                           size="sm"
                         >
-                          Unsubscribe
+                          {dictionary.notifications.unsubscribe}
                         </Button>
                       ) : (
                         <Button onClick={subscribeToPush} size="sm">
-                          Subscribe
+                          {dictionary.notifications.subscribe}
                         </Button>
                       )}
                     </div>
@@ -337,7 +347,7 @@ export default function NotificationSettingsPage({
                   {/* Notification Time */}
                   <div className="space-y-2">
                     <Label htmlFor="notification-time" className="text-base">
-                      Notification Time
+                      {dictionary.notifications.notificationTime}
                     </Label>
                     <div className="flex items-center space-x-4">
                       <input
@@ -349,7 +359,7 @@ export default function NotificationSettingsPage({
                       />
                       <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                         <Clock className="h-4 w-4" />
-                        <span>in your timezone</span>
+                        <span>{dictionary.notifications.inYourTimezone}</span>
                       </div>
                     </div>
                   </div>
@@ -357,7 +367,7 @@ export default function NotificationSettingsPage({
                   {/* Timezone Selection */}
                   <div className="space-y-2">
                     <Label htmlFor="timezone" className="text-base">
-                      Timezone
+                      {dictionary.notifications.timezone}
                     </Label>
                     <Select value={timezone} onValueChange={setTimezone}>
                       <SelectTrigger className="w-full max-w-xs">
@@ -372,7 +382,8 @@ export default function NotificationSettingsPage({
                       </SelectContent>
                     </Select>
                     <p className="text-sm text-muted-foreground">
-                      Current time in {timezone}: {getCurrentTimeInTimezone()}
+                      {dictionary.notifications.currentTimeInTimezone}
+                      {timezone}: {getCurrentTimeInTimezone()}
                     </p>
                   </div>
                 </>
@@ -386,7 +397,7 @@ export default function NotificationSettingsPage({
                       <div className="flex items-center space-x-2 text-green-600">
                         <CheckCircle className="h-4 w-4" />
                         <span className="text-sm">
-                          Settings saved successfully!
+                          {dictionary.notifications.settingsSavedSuccessfully}
                         </span>
                       </div>
                     )}
@@ -394,136 +405,34 @@ export default function NotificationSettingsPage({
                       <div className="flex items-center space-x-2 text-red-600">
                         <AlertCircle className="h-4 w-4" />
                         <span className="text-sm">
-                          Error saving settings. Please try again.
+                          {dictionary.notifications.errorSavingSettings}
                         </span>
                       </div>
                     )}
                   </div>
-                  <Button onClick={handleSave} disabled={isSaving}>
-                    {isSaving ? "Saving..." : "Save Settings"}
+                  <Button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="flex items-center space-x-2 w-[150px]"
+                  >
+                    {isSaving ? (
+                      <Trio size="20" speed="1.3" color="black" />
+                    ) : (
+                      "Save Settings"
+                    )}
                   </Button>
                 </div>
               )}
             </CardContent>
           </Card>
 
-          {/* Information Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* How It Works */}
-            <Card>
-              <CardHeader>
-                <CardTitle>How It Works</CardTitle>
-                <CardDescription>
-                  Understanding the notification system
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6  rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">1</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Set Your Time</p>
-                    <p className="text-xs ">
-                      Choose when you want to receive notifications
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6  rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">2</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Daily Fact Generation</p>
-                    <p className="text-xs ">
-                      AI creates a personalized fact for you
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">3</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Notification Delivery</p>
-                    <p className="text-xs">
-                      Receive your fact at the scheduled time
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Available Features */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Available Features</CardTitle>
-                <CardDescription>
-                  Current notification capabilities
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">
-                    Push notifications on all devices
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">
-                    Customizable notification time
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">Timezone support</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">PWA installation support</span>
-                </div>
-
-                <div className="pt-2 border-t">
-                  <p className="text-sm font-medium text-muted-foreground mb-2">
-                    Coming Soon:
-                  </p>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                      <span className="text-sm text-muted-foreground">
-                        Email notifications
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                      <span className="text-sm text-muted-foreground">
-                        Custom notification sounds
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                      <span className="text-sm text-muted-foreground">
-                        Multiple notification times
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                      <span className="text-sm text-muted-foreground">
-                        Weekend pause options
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
           {/* Current Status */}
           <Card>
             <CardHeader>
-              <CardTitle>Current Status</CardTitle>
-              <CardDescription>Your notification preferences</CardDescription>
+              <CardTitle>{dictionary.notifications.currentStatus}</CardTitle>
+              <CardDescription>
+                {dictionary.notifications.yourNotificationPreferences}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -536,7 +445,9 @@ export default function NotificationSettingsPage({
                       notificationEnabled ? "text-green-600" : "text-gray-500"
                     }`}
                   >
-                    {notificationEnabled ? "Enabled" : "Disabled"}
+                    {notificationEnabled
+                      ? dictionary.notifications.enabled
+                      : dictionary.notifications.disabled}
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
@@ -544,7 +455,9 @@ export default function NotificationSettingsPage({
                     Time
                   </p>
                   <p className="text-lg font-bold">
-                    {notificationEnabled ? notificationTime : "Not set"}
+                    {notificationEnabled
+                      ? notificationTime
+                      : dictionary.notifications.notSet}
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
@@ -552,24 +465,160 @@ export default function NotificationSettingsPage({
                     Timezone
                   </p>
                   <p className="text-lg font-bold">
-                    {notificationEnabled ? timezone : "Not set"}
+                    {notificationEnabled
+                      ? timezone
+                      : dictionary.notifications.notSet}
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <p className="text-sm font-medium text-muted-foreground">
-                    Push Notifications
+                    {dictionary.notifications.pushNotifications}
                   </p>
                   <p
                     className={`text-lg font-bold ${
                       pushSubscription ? "text-green-600" : "text-gray-500"
                     }`}
                   >
-                    {pushSubscription ? "Subscribed" : "Not subscribed"}
+                    {pushSubscription
+                      ? dictionary.notifications.subscribed
+                      : dictionary.notifications.notSubscribed}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
+          {/* Information Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* How It Works */}
+            <Card>
+              <CardHeader>
+                <CardTitle>{dictionary.notifications.howItWorks}</CardTitle>
+                <CardDescription>
+                  {dictionary.notifications.understandingTheNotificationSystem}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6  rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-blue-600 text-xs font-bold">1</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {dictionary.notifications.setYourTime}
+                    </p>
+                    <p className="text-xs ">
+                      {
+                        dictionary.notifications
+                          .chooseWhenYouWantToReceiveNotifications
+                      }
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6  rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-blue-600 text-xs font-bold">2</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {dictionary.notifications.dailyFactGeneration}
+                    </p>
+                    <p className="text-xs ">
+                      {
+                        dictionary.notifications
+                          .receiveYourFactAtTheScheduledTime
+                      }
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-blue-600 text-xs font-bold">3</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {dictionary.notifications.notificationDelivery}
+                    </p>
+                    <p className="text-xs">
+                      {
+                        dictionary.notifications
+                          .receiveYourFactAtTheScheduledTime
+                      }
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Available Features */}
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  {dictionary.notifications.currentNotificationCapabilities}
+                </CardTitle>
+                <CardDescription>
+                  {dictionary.notifications.currentNotificationCapabilities}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">
+                    {dictionary.notifications.pushNotificationsOnAllDevices}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">
+                    {dictionary.notifications.customizableNotificationTime}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">
+                    {dictionary.notifications.timezoneSupport}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">
+                    {dictionary.notifications.pwaInstallationSupport}
+                  </span>
+                </div>
+
+                <div className="pt-2 border-t">
+                  <p className="text-sm font-medium text-muted-foreground mb-2">
+                    {dictionary.notifications.comingSoon}
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        {dictionary.notifications.emailNotifications}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        {dictionary.notifications.customNotificationSounds}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        {dictionary.notifications.multipleNotificationTimes}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-sm text-muted-foreground">
+                        {dictionary.notifications.weekendPauseOptions}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
     </div>
