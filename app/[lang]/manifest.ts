@@ -1,11 +1,15 @@
 import type { MetadataRoute } from "next";
 
-export default function manifest(): MetadataRoute.Manifest {
+export default function manifest({
+  params,
+}: {
+  params: { lang: string };
+}): MetadataRoute.Manifest {
   return {
     name: "Facts Off",
     short_name: "Facts Off",
     description: "Daily historical facts delivered to your inbox",
-    start_url: "/",
+    start_url: `/${params.lang}`,
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#ffffff",

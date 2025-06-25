@@ -15,7 +15,7 @@ self.addEventListener("push", function (event) {
       actions: [
         {
           action: "read",
-          title: "Read Now",
+          title: "Get it now",
           icon: "/apple-icon.png",
         },
         {
