@@ -1,15 +1,17 @@
 import type { MetadataRoute } from "next";
 
-export default function manifest({
+export default async function manifest({
   params,
 }: {
-  params: { lang: string };
-}): MetadataRoute.Manifest {
+  params: Promise<{ lang: string }>;
+}): Promise<MetadataRoute.Manifest> {
+  const { lang } = await params;
+
   return {
     name: "Facts Off",
     short_name: "Facts Off",
     description: "Daily historical facts delivered to your inbox",
-    start_url: `/${params.lang}`,
+    start_url: `/${lang}`,
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#ffffff",
