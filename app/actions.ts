@@ -112,8 +112,8 @@ export async function sendNotification(
           JSON.stringify({
             title,
             body: message,
-            icon: "/web-app-manifest-192x192.png",
-            badge: "/web-app-manifest-192x192.png",
+            icon: "/apple-icon.png",
+            badge: "/apple-icon.png",
             data: {
               url: "/",
               dateOfArrival: Date.now(),
@@ -323,9 +323,9 @@ export async function sendScheduledNotifications() {
           user.push_subscription,
           JSON.stringify({
             title: "Facts Off",
-            body: "Time to get your fact",
-            icon: "/web-app-manifest-192x192.png",
-            badge: "/web-app-manifest-192x192.png",
+            body: "Time to get your fact (unless you're already way ahead of us)!",
+            icon: "/apple-icon.png",
+            badge: "/apple-icon.png",
             data: {
               url: "/",
               dateOfArrival: Date.now(),

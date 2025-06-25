@@ -3,8 +3,8 @@ self.addEventListener("push", function (event) {
     const data = event.data.json();
     const options = {
       body: data.body,
-      icon: data.icon || "/web-app-manifest-192x192.png",
-      badge: data.badge || "/web-app-manifest-192x192.png",
+      icon: data.icon || "/apple-icon.png",
+      badge: data.badge || "/apple-icon.png",
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),
@@ -16,12 +16,12 @@ self.addEventListener("push", function (event) {
         {
           action: "read",
           title: "Read Now",
-          icon: "/web-app-manifest-192x192.png",
+          icon: "/apple-icon.png",
         },
         {
           action: "close",
           title: "Close",
-          icon: "/web-app-manifest-192x192.png",
+          icon: "/apple-icon.png",
         },
       ],
     };

@@ -9,6 +9,8 @@ preferred_fact_length (short/medium/long)
 daily_notification_enabled (boolean)
 notification_time (time)
 timezone (string)
+push_subscription (JSONB) - web push subscription keys or null
+last_notification_sent_at (timestamp) - time when last push notification was sent
 interest_categories: Historical topic categories (20 predefined categories)
 
 id (serial primary key)
