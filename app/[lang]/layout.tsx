@@ -12,6 +12,22 @@ import { getDictionary } from "@/get-dictionary";
 export const metadata: Metadata = {
   title: "Facts Off",
   description: "Daily historical facts delivered to your inbox",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Facts Off",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  themeColor: "#ffffff",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export async function generateStaticParams() {
@@ -39,7 +55,25 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Facts Off" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="/web-app-manifest-192x192.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="512x512"
+          href="/web-app-manifest-512x512.png"
+        />
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>

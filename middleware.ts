@@ -33,6 +33,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/api/") ||
     pathname.startsWith("/sw.js") ||
     pathname.includes("/manifest.webmanifest") ||
+    pathname === "/manifest.webmanifest" ||
     pathname.includes("/favicon.ico") ||
     pathname.includes("/apple-icon.png") ||
     pathname.includes("/web-app-manifest-")

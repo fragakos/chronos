@@ -29,22 +29,33 @@ self.addEventListener("push", function (event) {
   }
 });
 
+// Helper function to get the user's locale from browser or default to 'en'
+function getUserLocale() {
+  const supportedLocales = ["en", "el"]; // Add your supported locales here
+  const browserLang =
+    self.navigator.language || self.navigator.languages[0] || "en";
+  const locale = browserLang.split("-")[0]; // Get the primary language code
+  return supportedLocales.includes(locale) ? locale : "en";
+}
+
 self.addEventListener("notificationclick", function (event) {
   console.log("Notification click received.");
 
   event.notification.close();
 
+  const userLocale = getUserLocale();
+
   if (event.action === "read") {
     // Open the app and navigate to the specific fact if available
     const url = event.notification.data.factId
-      ? `/?factId=${event.notification.data.factId}`
-      : "/";
+      ? `/${userLocale}?factId=${event.notification.data.factId}`
+      : `/${userLocale}`;
 
     event.waitUntil(
       clients.matchAll().then(function (clientList) {
         for (var i = 0; i < clientList.length; i++) {
           var client = clientList[i];
-          if (client.url === self.location.origin + url && "focus" in client) {
+          if (client.url.includes(self.location.origin) && "focus" in client) {
             return client.focus();
           }
         }
@@ -62,12 +73,12 @@ self.addEventListener("notificationclick", function (event) {
       clients.matchAll().then(function (clientList) {
         for (var i = 0; i < clientList.length; i++) {
           var client = clientList[i];
-          if (client.url === self.location.origin && "focus" in client) {
+          if (client.url.includes(self.location.origin) && "focus" in client) {
             return client.focus();
           }
         }
         if (clients.openWindow) {
-          return clients.openWindow("/");
+          return clients.openWindow(`/${userLocale}`);
         }
       })
     );
