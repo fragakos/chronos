@@ -6,7 +6,8 @@ import { Clock, BookOpen, Zap, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { type getDictionary } from "@/get-dictionary";
 import { type Locale } from "@/i18n-config";
-
+import Image from "next/image";
+import Logo from "@/public/Facts Off.png";
 const HeroSection = ({
   dictionary,
   currentLang,
@@ -81,12 +82,19 @@ const HeroSection = ({
             </div>
           </motion.div>
 
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent"
+          <motion.div
+            className="flex justify-center mb-6"
             variants={itemVariants}
           >
-            {landing.hero.title}
-          </motion.h1>
+            <Image
+              src={Logo}
+              alt="Chronikos Logo"
+              width={400}
+              height={120}
+              className="max-w-full h-auto"
+              priority
+            />
+          </motion.div>
 
           <motion.p
             className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"

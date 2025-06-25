@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { InterestQuestionnaire } from "@/components/dashboard/interest-questionnaire";
+import { InterestQuestionnaire } from "@/components/dashboard/questionnaire/interest-questionnaire";
 import { getDictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
 

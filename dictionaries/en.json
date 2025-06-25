@@ -8,15 +8,15 @@
   },
   "landing": {
     "hero": {
-      "tagline": "10 minutes a day",
+      "tagline": "5 minutes a day",
       "title": "Facts Off",
-      "subtitle": "Discover fascinating historical facts and insights in just 10 minutes a day. Tailored to your interests, perfect for our fast-paced 2025 lifestyle.",
+      "subtitle": "Discover fascinating historical facts and insights in just 5 minutes a day. Tailored to your interests, perfect for our fast-paced 2025 lifestyle.",
       "startLearning": "Start Learning Today",
       "signIn": "Sign In",
       "features": {
         "quickEfficient": {
           "title": "Quick & Efficient",
-          "description": "Get your daily dose of history in just 10 minutes"
+          "description": "Get your daily dose of history in just 5 minutes"
         },
         "personalized": {
           "title": "Personalized",
@@ -28,6 +28,7 @@
         }
       }
     },
+
     "features": {
       "title": "Explore History Your Way",
       "subtitle": "Choose from 20+ specialized categories to personalize your daily historical journey. Each category is carefully curated to provide fascinating insights and facts.",
@@ -125,11 +126,11 @@
     },
     "cta": {
       "title": "Start Your Historical Journey Today",
-      "subtitle": "Join thousands of learners who are discovering fascinating historical facts in just 10 minutes a day. Perfect for busy professionals, students, and history enthusiasts.",
+      "subtitle": "Join thousands of learners who are discovering fascinating historical facts in just 5 minutes a day. Perfect for busy professionals, students, and history enthusiasts.",
       "features": {
         "quickDailyDoses": {
           "title": "Quick Daily Doses",
-          "description": "Get your historical knowledge fix in just 10 minutes - perfect for coffee breaks, commutes, or bedtime reading."
+          "description": "Get your historical knowledge fix in just 5 minutes - perfect for coffee breaks, commutes, or bedtime reading."
         },
         "curatedContent": {
           "title": "Curated Content",
@@ -148,10 +149,15 @@
       }
     }
   },
+  "nav": {
+    "notificationSettings": "Notification Settings",
+    "interestSettings": "Interest Settings",
+    "logout": "Logout"
+  },
   "footer": {
     "brand": {
       "name": "Facts Off",
-      "description": "Your daily dose of historical knowledge. Discover fascinating facts and insights in just 10 minutes a day, tailored to your interests.",
+      "description": "Your daily dose of historical knowledge. Discover fascinating facts and insights in just 5 minutes a day, tailored to your interests.",
       "tagline": "Perfect for busy professionals, students, and history enthusiasts in our fast-paced 2025 world."
     },
     "quickLinks": {
@@ -269,7 +275,7 @@
     "main": {
       "welcome": "Welcome back, ",
       "subtitle": "Ready to discover fascinating historical facts tailored to your interests?",
-      "getRandomFact": "Get a random historical fact",
+      "getRandomFact": "Fact Me Up!",
       "loading": "Loading your dashboard...",
       "profileSummary": {
         "title": "Profile Summary",
@@ -287,7 +293,7 @@
       "quickActions": {
         "title": "Quick Actions",
         "subtitle": "Quick actions for your journey",
-        "randomFact": "Get a random historical fact",
+        "randomFact": "Fact Me Up!",
         "updateInterests": "Update Interests",
         "viewHistory": "View History",
         "notifications": "Notifications"
@@ -354,6 +360,8 @@
       "middle_east": "Middle East",
       "oceania": "Oceania"
     },
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
     "steps": {
       "welcome": {
         "title": "Welcome",

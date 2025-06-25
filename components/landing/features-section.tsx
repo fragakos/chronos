@@ -22,11 +22,15 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { type getDictionary } from "@/get-dictionary";
+import Link from "next/link";
+import { Locale } from "@/i18n-config";
 
 const FeaturesSection = ({
   dictionary,
+  currentLang,
 }: {
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
+  currentLang: Locale;
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -219,23 +223,25 @@ const FeaturesSection = ({
             const IconComponent = category.icon;
             return (
               <motion.div key={category.key} variants={cardVariants}>
-                <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-card">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <IconComponent className="h-6 w-6 text-primary" />
+                <Link href={`/${currentLang}/auth/signup`}>
+                  <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-card">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <IconComponent className="h-6 w-6 text-primary" />
+                        </div>
+                        <CardTitle className="text-lg font-semibold text-foreground">
+                          {category.name}
+                        </CardTitle>
                       </div>
-                      <CardTitle className="text-lg font-semibold text-foreground">
-                        {category.name}
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {category.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {category.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             );
           })}

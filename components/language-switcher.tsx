@@ -7,14 +7,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Globe } from "lucide-react";
+
 import { usePathname, useRouter } from "next/navigation";
 import { i18n, type Locale } from "@/i18n-config";
 
 const languages = {
   en: {
     name: "English",
-    flag: "🇺🇸",
+    flag: "en",
   },
   el: {
     name: "Ελληνικά",
@@ -46,20 +46,12 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: Locale }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="flex items-center gap-2 hover:bg-accent/50"
-        >
-          <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline-flex items-center gap-1">
-            <span>{currentLanguage.flag}</span>
-            <span className="text-sm font-medium">{currentLanguage.name}</span>
-          </span>
-          <span className="sm:hidden">{currentLanguage.flag}</span>
+        <Button variant="outline" size="icon">
+          <span className="text-base">{currentLanguage.flag}</span>
+          <span className="sr-only">Change language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[150px]">
+      <DropdownMenuContent align="end" className="min-w-[120px]">
         {i18n.locales.map((locale) => {
           const language = languages[locale];
           const isActive = locale === currentLang;
@@ -75,7 +67,7 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: Locale }) => {
               }`}
             >
               <span className="text-base">{language.flag}</span>
-              <span className="text-sm">{language.name}</span>
+              <span className="text-sm font-medium">{language.name}</span>
               {isActive && (
                 <span className="ml-auto text-xs text-muted-foreground">✓</span>
               )}

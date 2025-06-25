@@ -55,6 +55,8 @@ export const createPrompt = (answers: QuestionnaireData) => {
 
 7. **Language Preferences**: Analyze their response patterns:
    - English vs. Greek
+8. **Size of preferred fact**: Analyze their response patterns:
+   - Short (Around 100 words) vs. Medium (Around 200 words) vs. Long (Around 300 words)
 
 **OUTPUT FORMAT:**
 Provide a structured text analysis with clear sections, specific examples from their answers, and actionable insights. Rate confidence levels (High/Medium/Low) for each major finding. Include both explicit interests (directly stated) and implicit interests (inferred from response patterns).

@@ -43,7 +43,13 @@ export default async function RootLayout({
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {user && <NavHeader user={user} currentLang={currentLang} />}
+          {user && (
+            <NavHeader
+              user={user}
+              currentLang={currentLang}
+              dictionary={dictionary}
+            />
+          )}
           {children}
           <Footer currentLang={currentLang} dict={dictionary} />
           <InstallDialog />

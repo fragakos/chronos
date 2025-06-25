@@ -1,4 +1,4 @@
-export const submissionLoadingStates = [
+export const submissionLoadingStatesEn = [
   {
     text: "Saving your awesome preferences...",
   },
@@ -34,5 +34,43 @@ export const submissionLoadingStates = [
   },
   {
     text: "Making sure everything doesn't break...",
+  },
+];
+export const submissionLoadingStatesEl = [
+  {
+    text: "Αποθηκεύουμε τις μοναδικές προτιμήσεις σου...",
+  },
+  {
+    text: "Ψάχνουμε βαθιά στα ενδιαφέροντά σου...",
+  },
+  {
+    text: "Δημιουργούμε το προφίλ σου...",
+  },
+  {
+    text: "Μαζεύουμε ιστορικά fact για σένα...",
+  },
+  {
+    text: "Σχεδόν έτοιμο, μείνε μαζί μας...",
+  },
+  {
+    text: "Ετοιμάζουμε κάτι ξεχωριστό...",
+  },
+  {
+    text: "Φτιάχνουμε τον πίνακα ελέγχου σου...",
+  },
+  {
+    text: "Μαθαίνουμε στην AI το στυλ σου...",
+  },
+  {
+    text: "Κάνουμε την ιστορία ξανά cool...",
+  },
+  {
+    text: "Προσπαθούμε να πείσουμε τον server...",
+  },
+  {
+    text: "Προσθέτουμε το μυστικό συστατικό...",
+  },
+  {
+    text: "Ελέγχουμε ότι όλα δουλεύουν σωστά...",
   },
 ];

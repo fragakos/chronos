@@ -15,7 +15,7 @@ const LandingPage = ({
   return (
     <div className="min-h-screen">
       <HeroSection dictionary={dictionary} currentLang={currentLang} />
-      <FeaturesSection dictionary={dictionary} />
+      <FeaturesSection dictionary={dictionary} currentLang={currentLang} />
       <CTASection dictionary={dictionary} currentLang={currentLang} />
     </div>
   );
